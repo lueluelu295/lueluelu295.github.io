@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+
+  
+
+  
+    <meta name="author" content="John Doe">
+  
+
+  
+
+  
+
+  <title>指针与数组 | Hexo</title>
+
+  
+
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+
+  <!--mathjax latex数学公式显示支持-->
+  
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+    <div class="post-image" style="background-image: url(/1.jpg)"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Hexo
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">指针与数组</h1>
+          <h2 class="title-sub-wrap">
+            <strong>John Doe</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2024-10-15T03:13:19.000Z" itemprop="datePublished">2024-10-15</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/c%E5%9F%BA%E7%A1%80/">🏷️ c基础</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
+
+<p><strong>定义并使用数组:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">void Pp(int *p,int len)&#123;</span><br><span class="line">	for (int x = 0; x &lt; len;x++) &#123;</span><br><span class="line">		printf(&quot;%d\n&quot;,p[x]);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc,char* argv[]) &#123;</span><br><span class="line">	int p[] = &#123; 1,2,3,4,5,6,7,8,9,10 &#125;;</span><br><span class="line">	Pp(p,10);</span><br><span class="line"></span><br><span class="line">	system(&quot;pause&quot;);</span><br><span class="line">	return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定义并使用二维数组:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	int shuzu[2][3] = &#123; &#123;1,2,3&#125;, &#123;4,5,6&#125; &#125;;</span><br><span class="line">	//shuzu后第一个[]表示几个数组第二个[]表示数组里面几个元素</span><br><span class="line">	int* p = &amp;shuzu[0][0];</span><br><span class="line"></span><br><span class="line">	printf(&quot;p[0][0]基址：%x\n&quot;,p);</span><br><span class="line">	printf(&quot;p[0][0]数据：%d\n&quot;, *p);</span><br><span class="line">	printf(&quot;p[0][1]数据：%d\n&quot;, *p+1);</span><br><span class="line"></span><br><span class="line">	int* p2 = &amp;shuzu[1][0];</span><br><span class="line">	printf(&quot;p[1][0]基址：%x\n&quot;, p2);</span><br><span class="line">	printf(&quot;数组个数：%d\n&quot;,sizeof(shuzu)/sizeof(int));</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>使用指针遍历数组:</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc,char* argv[])&#123;</span><br><span class="line">	int shuzu[10] = &#123;1,2,3,4,5,6,7,8,9,10&#125;;</span><br><span class="line">	int* p;</span><br><span class="line">	for (p = &amp;shuzu; p &lt; (shuzu + 10); p++)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;%d\n&quot;,*p);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	system(&quot;pause&quot;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>动态数组的定义:</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc,char* argv[]) &#123;</span><br><span class="line">	int** p = (int*)malloc(sizeof(int));	//二级指针，指向指针</span><br><span class="line">	p[0] = (int*)malloc(sizeof(int));		//一级指针，指向内存</span><br><span class="line">	p[1] = (int*)malloc(sizeof(int));</span><br><span class="line">	p[2] = (int*)malloc(sizeof(int));</span><br><span class="line">	//为p分配内存空间</span><br><span class="line"></span><br><span class="line">	p[0][0] = 1;</span><br><span class="line">	p[0][1] = 2;</span><br><span class="line">	p[0][2] = 3;</span><br><span class="line">	p[0][3] = 4;</span><br><span class="line"></span><br><span class="line">	for (int i = 0; i &lt; 4; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;%d\n&quot;,p[0][i]);</span><br><span class="line">	&#125;</span><br><span class="line">	system(&quot;pause&quot;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定义一维指针数组:</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void PrintInt()</span><br><span class="line">&#123;</span><br><span class="line">    int x = 10, y = 20, z = 30;</span><br><span class="line"></span><br><span class="line">    int* Array[] = &#123; &amp;x, &amp;y, &amp;z &#125;;   // 定义指针数组(存放变量地址)</span><br><span class="line">    *Array[0] = 100;                 // 给x重新赋值</span><br><span class="line">    *Array[2] = 300;                 // 给z重新赋值</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; 3; x++)</span><br><span class="line">        printf(&quot;地址: %x --&gt; 数值:%d \n&quot;, Array[x], *(Array[x]));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void PrintArray()</span><br><span class="line">&#123;</span><br><span class="line">    int x[] = &#123; 1, 2, 3, 4, 5 &#125;;</span><br><span class="line">    int y[] = &#123; 6, 7, 8, 9, 10 &#125;;</span><br><span class="line"></span><br><span class="line">    int* Array[] = &#123; &amp;x, &amp;y &#125;;</span><br><span class="line"></span><br><span class="line">    printf(&quot;单独取地址: %x --&gt; 取值: %d \n&quot;, (Array[0]), *(Array[0]));</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; 2; x++)     //两个数组</span><br><span class="line">    &#123;</span><br><span class="line">        for (int y = 0; y &lt; 5; y++) //五个元素</span><br><span class="line">        &#123;</span><br><span class="line">           printf(&quot;循环取地址: %x --&gt; 数值: %d \n&quot;, Array[x] + y, *(Array[x] + y));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    PrintArray();</span><br><span class="line">    PrintInt();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定义二维指针数组:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">void PrintArray(int(*Array)[3], int shuliang, int yuansu)</span><br><span class="line">&#123;</span><br><span class="line">    for (int x = 0; x &lt; shuliang; x++)</span><br><span class="line">    &#123;</span><br><span class="line">        for (int y = 0; y &lt; yuansu; y++)</span><br><span class="line">        &#123;</span><br><span class="line">            // Array[x][y] 等价于 =&gt; *(*(Array + x) + y)</span><br><span class="line">            printf(&quot;地址: %x --&gt; 遍历数组: %d \n&quot;, (*(Array + x) + y), Array[x][y]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[2][3] = &#123; &#123; 1, 2, 3 &#125;, &#123; 7, 8, 9 &#125; &#125;;</span><br><span class="line"></span><br><span class="line">    PrintArray(Array, 2, 3);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>**数组实现逆序排列:**（冒泡排序） </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void maopao(int* arr, int len)</span><br><span class="line">&#123;</span><br><span class="line">    int flag = 1;</span><br><span class="line">    for (int i = 0; i &lt; len - 1; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        for (int j = 0; j &lt; len - i - 1; j++)</span><br><span class="line">        &#123;</span><br><span class="line">            if (arr[j] &gt; arr[j + 1])</span><br><span class="line">            &#123;</span><br><span class="line">                flag = 0;</span><br><span class="line">                int temp = arr[j];</span><br><span class="line">                arr[j] = arr[j + 1];</span><br><span class="line">                arr[j + 1] = temp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        if (flag)</span><br><span class="line">            return;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[] = &#123; 9,2,1,4,3,6,7,5,9,10 &#125;;</span><br><span class="line"></span><br><span class="line">    int len = sizeof(Array) / sizeof(int);</span><br><span class="line">    //printf(&quot;%d\n&quot;,len);</span><br><span class="line">    maopao(Array, len);</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; len; x++)</span><br><span class="line">        printf(&quot;%d \n&quot;, Array[x]);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>多级指针与野指针:</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void MyPrintA()</span><br><span class="line">&#123;</span><br><span class="line">	int number = 10;</span><br><span class="line">	int* ptr1 = &amp;number;   // 定义一级指针,指向number;</span><br><span class="line">	int** ptr2 = &amp;ptr1;    // 定义二级指针,里面存放一级指针的地址</span><br><span class="line"></span><br><span class="line">	printf(&quot;二级: %x --&gt; 一级: %x --&gt; 数据: %x (%d) \n&quot;, ptr2, ptr1, &amp;number, number);</span><br><span class="line"></span><br><span class="line">	int age = 20;</span><br><span class="line">	int* ptr3 = &amp;age;      // 定义一级指针</span><br><span class="line">	int** ptr4 = &amp;ptr3;    // 定义二级指针</span><br><span class="line">	int*** ptr5 = &amp;ptr4;   // 定义三级指针</span><br><span class="line">	***ptr5 = 100;         // 改变指针中的数据</span><br><span class="line"></span><br><span class="line">	printf(&quot;三级: %x --&gt; 二级: %x --&gt; 一级: %x --&gt; 数据: %x (%d) \n&quot;, ptr5, ptr4, ptr3, &amp;age, age);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void MyPrintB()</span><br><span class="line">&#123;</span><br><span class="line">	int number = 10;</span><br><span class="line"></span><br><span class="line">	int* ptr = &amp;number;   // 定义指针指向number</span><br><span class="line"></span><br><span class="line">	ptr = 0xffff;         // 该指针是一个错误的地址(野指针)</span><br><span class="line">	*ptr = 200;           // 尝试赋值会发生错误</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">	MyPrintA();</span><br><span class="line"></span><br><span class="line">	system(&quot;pause&quot;);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Void万能指针</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">// 万能指针,必须经过转换才可使用</span><br><span class="line">void MyPrintA()</span><br><span class="line">&#123;</span><br><span class="line">    int number = 10;</span><br><span class="line">    void* int_ptr = &amp;number;  // 万能指针</span><br><span class="line"></span><br><span class="line">    *(int*)int_ptr = 100;    // 赋值必须进行强转(告诉它需要读取多大的字节)</span><br><span class="line">    printf(&quot;数值: %d --&gt; 地址: %x \n&quot;, number, int_ptr);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 针对数组类型的万能指针</span><br><span class="line">void MyPrintB()</span><br><span class="line">&#123;</span><br><span class="line">    int Array[10] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 &#125;;</span><br><span class="line"></span><br><span class="line">    void* array_ptr = Array;            // 赋值一个空指针</span><br><span class="line"></span><br><span class="line">    *(int*)array_ptr = 100;           // 改变第一个值 Array[0]</span><br><span class="line">    *((int*)array_ptr + 1) = 200;     // 改变第二个值 Array[1]</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; 10; x++)</span><br><span class="line">        printf(&quot;输出指针: %x 数据: %d \n&quot;, ((int*)array_ptr + x), Array[x]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    MyPrintA();</span><br><span class="line">    MyPrintB();</span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>定义指向数组的指针:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">// 第一种方式：间接定义数组指针类型</span><br><span class="line">void MyPrintA()</span><br><span class="line">&#123;</span><br><span class="line">  // typedef 重定义一个数组指针类型</span><br><span class="line">  typedef int(Array_Type)[10];</span><br><span class="line">  // 相当于定义了 =&gt; int MyArray[10];</span><br><span class="line">  Array_Type MyArray;</span><br><span class="line">  </span><br><span class="line">  for (int x = 0; x &lt; 10; x++)</span><br><span class="line">  &#123;</span><br><span class="line">    MyArray[x] = x;</span><br><span class="line">    printf(&quot;输出 MyArray --&gt; %d \n&quot;, MyArray[x]);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  // 定义数组指针,该指针是指向整个数组的指针</span><br><span class="line">  Array_Type *pArray = &amp;MyArray;</span><br><span class="line"></span><br><span class="line">  // 由于 pArray 指向了整个数组,我们该如何遍历呢 ?</span><br><span class="line">  for (int x = 0; x &lt; 10; x++)</span><br><span class="line">  &#123;</span><br><span class="line">    int Number = *(*pArray + x);</span><br><span class="line">    printf(&quot;遍历 MyArray --&gt; %d \n&quot;, Number);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 第二种方式：直接定义数组指针类型</span><br><span class="line">void MyPrintB()</span><br><span class="line">&#123;</span><br><span class="line">  // 直接定义Array数组指针类型,并将pArray_Point指向数组</span><br><span class="line">  int Array[10] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 &#125;;</span><br><span class="line"></span><br><span class="line">  typedef int(*Array_Point)[10];       // 直接定义指针类型</span><br><span class="line">  Array_Point pArray_Point = &amp;Array;   // 将指针指向数组首地址</span><br><span class="line"></span><br><span class="line">  for (int x = 0; x &lt; 10; x++)</span><br><span class="line">    printf(&quot;遍历 pArray_Point --&gt; %d \n&quot;, *(*pArray_Point + x));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 第三种方式：直接定义数组指针变量</span><br><span class="line">void PrintC()</span><br><span class="line">&#123;</span><br><span class="line">  int Array[10] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 &#125;;</span><br><span class="line">  int(*pArray_Param)[10] = &amp;Array;   // 直接声明 pArray_Param</span><br><span class="line"></span><br><span class="line">  for (int x = 0; x &lt; 10; x++)</span><br><span class="line">    printf(&quot;遍历 pArray_Param --&gt; %d \n&quot;, *(*pArray_Param + x));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">  PrintC();</span><br><span class="line">  system(&quot;pause&quot;);</span><br><span class="line">  return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用指针实现冒泡排序</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void BubbleSort(int* Array, int len)</span><br><span class="line">&#123;</span><br><span class="line">    for (int x = 0; x &lt; len - 1; x++)</span><br><span class="line">    &#123;</span><br><span class="line">        for (int y = 0; y &lt; len - 1 - x; y++)</span><br><span class="line">        &#123;</span><br><span class="line">            if (*(Array + y) &gt; *(Array + y + 1))</span><br><span class="line">            &#123;</span><br><span class="line">                int tmp = *(Array + y);</span><br><span class="line">                *(Array + y) = *(Array + y + 1);</span><br><span class="line">                *(Array + y + 1) = tmp;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[10] = &#123; 4,7,8,2,1,8,9,3,4,10 &#125;;</span><br><span class="line">    int len = sizeof(Array) / sizeof(Array[0]);</span><br><span class="line">    int* ptr = Array;</span><br><span class="line"></span><br><span class="line">    BubbleSort(ptr, len);</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; 10; x++)</span><br><span class="line">    &#123;</span><br><span class="line">        printf(&quot;%d &quot;, *(ptr + x));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用指针实现选择排序:</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;stdlib.h&gt;</span><br><span class="line">#include &lt;string.h&gt;</span><br><span class="line"></span><br><span class="line">void PrintArray(char** Array, int len)</span><br><span class="line">&#123;</span><br><span class="line">    for (int x = 0; x &lt; len; ++x)</span><br><span class="line">        printf(&quot;%s \n&quot;, Array[x]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void SelectSort(char** Array, int len)</span><br><span class="line">&#123;</span><br><span class="line">    for (int x = 0; x &lt; len; ++x)</span><br><span class="line">    &#123;</span><br><span class="line">        int min = x;</span><br><span class="line">        for (int y = x + 1; y &lt; len; ++y)</span><br><span class="line">        &#123;</span><br><span class="line">            if (strcmp(Array[y], Array[min]) &lt; 0)</span><br><span class="line">                min = y;</span><br><span class="line">        &#125;</span><br><span class="line">        if (min != x)</span><br><span class="line">        &#123;</span><br><span class="line">            char* tmp = Array[min];</span><br><span class="line">            Array[min] = Array[x];</span><br><span class="line">            Array[x] = tmp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    char* pArray[] = &#123; &quot;ddd&quot;, &quot;bbb&quot;,&quot;sss&quot;, &quot;qqq&quot;, &quot;yyy&quot;, &quot;eee&quot;, &quot;ooo&quot; &#125;;</span><br><span class="line">    int len = sizeof(pArray) / sizeof(char*);</span><br><span class="line"></span><br><span class="line">    SelectSort(pArray, len);</span><br><span class="line">    PrintArray(pArray, len);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用指针完成数组逆序:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int ArrayReverse(int* Array, int len)</span><br><span class="line">&#123;</span><br><span class="line">    int* Ptr, * StartPtr, * EndPtr, Middle, Temporary;</span><br><span class="line"></span><br><span class="line">    StartPtr = Array;          // 取出数组首地址</span><br><span class="line">    EndPtr = Array + len - 1;  // 取出数组结束地址</span><br><span class="line">    Middle = (len - 1) / 2;    // 计算出中位数</span><br><span class="line">    Ptr = Array + Middle;      // 指向数组尾地址</span><br><span class="line"></span><br><span class="line">    for (StartPtr = Array; StartPtr &lt;= Ptr; StartPtr++, EndPtr--)</span><br><span class="line">    &#123;</span><br><span class="line">        Temporary = *StartPtr;</span><br><span class="line">        *StartPtr = *EndPtr;</span><br><span class="line">        *EndPtr = Temporary;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[10] = &#123; 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 &#125;;</span><br><span class="line"></span><br><span class="line">    ArrayReverse(&amp;Array, 10);</span><br><span class="line"></span><br><span class="line">    for (int x = 0; x &lt; 10; x++)</span><br><span class="line">        printf(&quot;%d &quot;, Array[x]);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>用指针查找最大最小值:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int Lookup_Max_Min(int* Array, int len, int* max, int* min)</span><br><span class="line">&#123;</span><br><span class="line">    int* ptr;</span><br><span class="line">    *max = *min = *Array;   // 假设最大最小都是Array</span><br><span class="line"></span><br><span class="line">    for (ptr = Array; ptr &lt; Array + len; ptr++)</span><br><span class="line">    &#123;</span><br><span class="line">        if (*ptr &gt; *max)</span><br><span class="line">            *max = *ptr;</span><br><span class="line">        else if (*ptr &lt; *min)</span><br><span class="line">            *min = *ptr;</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[10] = &#123; 6,5,7,8,9,0,3,2,1,5 &#125;;</span><br><span class="line">    int Array_Max, Array_Min;</span><br><span class="line"></span><br><span class="line">    Lookup_Max_Min(&amp;Array, 10, &amp;Array_Max, &amp;Array_Min);</span><br><span class="line"></span><br><span class="line">    printf(&quot;最大值: %d --&gt; 最小值: %d \n&quot;, Array_Max, Array_Min);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>指针实现数组操作:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;Windows.h&gt;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    int Array[] = &#123; 1,2,3,4,5,6,7,8,9,10 &#125;;</span><br><span class="line"></span><br><span class="line">    DWORD* PEB = (DWORD*)Array;</span><br><span class="line">    DWORD* Ldr = *((DWORD**)((DWORD*)Array + 1));</span><br><span class="line">    printf(&quot;Ldr = &gt; %x Value =  %d \n&quot;, &amp;Ldr, Ldr);</span><br><span class="line"></span><br><span class="line">    // 基本的取值</span><br><span class="line">    printf(&quot;PEB = %x &amp;PEB = %x \n&quot;, PEB, &amp;PEB);</span><br><span class="line">    Ldr = (DWORD*)&amp;PEB;</span><br><span class="line">    printf(&quot;LDR = %x &amp;LDR = %x *LDR = %x \n&quot;, Ldr, &amp;Ldr, *Ldr);</span><br><span class="line">    printf(&quot;(unsigned char *)PEB = %x \n&quot;, (unsigned char*)PEB);</span><br><span class="line">    printf(&quot;(unsigned char *)PEB + 4 = %x \n&quot;, (unsigned char*)PEB + 4);</span><br><span class="line">    printf(&quot;取出第一个元素内存地址: %x \n&quot;, (DWORD**)((unsigned char*)PEB + 4));</span><br><span class="line">    printf(&quot;取出其中的值: %d \n&quot;, *(DWORD**)((unsigned char*)PEB + 4));</span><br><span class="line"></span><br><span class="line">    // 取值与替换值</span><br><span class="line">    DWORD ref = (DWORD) * ((unsigned char*)Array + 4);  // 取出第2个值</span><br><span class="line">    *((DWORD*)(Array + 1)) = 10;                      // 替换数组中第二个值</span><br><span class="line">    printf(&quot;取出的值: %d 替换后: %d \n&quot;, ref, *((DWORD*)(Array + 1)));</span><br><span class="line"></span><br><span class="line">    // 正向遍历元素</span><br><span class="line">    for (int x = 0; x &lt; 10; x++)</span><br><span class="line">    &#123;</span><br><span class="line">        DWORD ref1 = *((DWORD*)((unsigned char*)Array + (x * 4)));</span><br><span class="line">        printf(&quot;正向元素输出: %d \n&quot;, ref1);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 反向输出元素</span><br><span class="line">    DWORD* Frist = NULL;</span><br><span class="line">    DWORD* Last = NULL;</span><br><span class="line">    for (int x = 0; x &lt; 10; x++)</span><br><span class="line">    &#123;</span><br><span class="line">        Frist = *(DWORD**)((DWORD*)Array + x);</span><br><span class="line">        Last = (DWORD*)((DWORD*)Array + (9 - x));</span><br><span class="line">        printf(&quot;反向输出: %d --&gt; %d \n&quot;, Frist, *Last);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/LyShark/p/17754069.html">www.cnblogs.com/LyShark/p/17754069.html</a></p>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/10/15/%E6%8C%87%E9%92%88%E4%B8%8E%E5%87%BD%E6%95%B0/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">指针与函数</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/10/15/%E6%8C%87%E9%92%88%E4%B8%8E%E7%BB%93%E6%9E%84/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">指针与结构</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+      <img src="/favicon.ico" class="soft-size--round soft-style--box" alt="略略略">
+    
+    
+      <h2>略略略</h2>
+    
+    
+      <p>贵在坚持</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>8</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        2
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/c%E4%BB%A3%E7%A0%81/" style="font-size: 10px;" class="tags-cloud-0">c代码</a> <a href="/tags/c%E5%9F%BA%E7%A1%80/" style="font-size: 10px;" class="tags-cloud-0">c基础</a>
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    <div class="social-icons">
+      
+        
+      
+        
+      
+        
+      
+        
+          <a href="https://github.com/" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+          </a>
+        
+      
+        
+          <a href="https://twitter.com" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-twitter" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M962.285714 233.142857q-38.285714 56-92.571429 95.428571 0.571429 8 0.571429 24 0 74.285714-21.714286 148.285714t-66 142-105.428571 120.285714-147.428571 83.428571-184.571429 31.142857q-154.857143 0-283.428571-82.857143 20 2.285714 44.571429 2.285714 128.571429 0 229.142857-78.857143-60-1.142857-107.428571-36.857143t-65.142857-91.142857q18.857143 2.857143 34.857143 2.857143 24.571429 0 48.571429-6.285714-64-13.142857-106-63.714286t-42-117.428571l0-2.285714q38.857143 21.714286 83.428571 23.428571-37.714286-25.142857-60-65.714286t-22.285714-88q0-50.285714 25.142857-93.142857 69.142857 85.142857 168.285714 136.285714t212.285714 56.857143q-4.571429-21.714286-4.571429-42.285714 0-76.571429 54-130.571429t130.571429-54q80 0 134.857143 58.285714 62.285714-12 117.142857-44.571429-21.142857 65.714286-81.142857 101.714286 53.142857-5.714286 106.285714-28.571429z"></path>
+</svg>
+          </a>
+        
+      
+    </div>
+     
+    <p>&copy; 2024 <a href="/" target="_blank">John Doe</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  <!-- aplayer -->
+
+
+<!-- dplayer -->
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>
