@@ -22,7 +22,7 @@
 
   
 
-  <title>指针与结构 | Hexo</title>
+  <title>枚举进程 | Hexo</title>
 
   
 
@@ -93,7 +93,7 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">指针与结构</h1>
+          <h1 class="title-wrap">枚举进程</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
@@ -106,7 +106,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/c%E5%9F%BA%E7%A1%80/">🏷️ c基础</a></li>
+    <li><a href="/tags/c%E4%BB%A3%E7%A0%81/">🏷️ c代码</a></li>
   
 </ul>
         </div>
@@ -132,12 +132,17 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
-<p><strong>结构体的定义与使用:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">struct student</span><br><span class="line">&#123;</span><br><span class="line">	int num;</span><br><span class="line">	char name[20];</span><br><span class="line">	char age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	struct student stu = &#123;100,&quot;xixi&quot;,15&#125;;</span><br><span class="line">	printf(&quot;普通引用%d  --&gt;  %s --&gt; %d \n&quot;,stu.num,stu.name,stu.age);</span><br><span class="line"></span><br><span class="line">	struct student* p;</span><br><span class="line">	p = &amp;stu;</span><br><span class="line">	printf(&quot;指针引用%d  --&gt;  %s --&gt; %d \n&quot;, p-&gt;num, p-&gt;name, p-&gt;age);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>枚举该进程的核心点在于使用<code>CreateToolhelp32Snapshot()</code>函数，该函数用于创建系统进程和线程快照，它可以捕获当前系统中进程和线程相关的信息（如PID、线程数量、线程ID等）</p>
+<p>CreateToolhelp32Snapshot 函数原型如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HANDLE CreateToolhelp32Snapshot(</span><br><span class="line">  DWORD dwFlags,  // 快照类型标记</span><br><span class="line">  DWORD th32ProcessID  // 进程PID，如果打算捕获系统所有进程的信息，则为0</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
 
-<p><strong>动态分配结构体成员:</strong> </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">struct student</span><br><span class="line">&#123;</span><br><span class="line">	int num;</span><br><span class="line">	char name[20];</span><br><span class="line">	char age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Per &#123;</span><br><span class="line">	char* name;</span><br><span class="line">	int age;</span><br><span class="line">&#125;per;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	// 直接分配整个结构体空间大小</span><br><span class="line">	struct student *stu = malloc(sizeof(struct student));</span><br><span class="line">	stu-&gt;age = 24;</span><br><span class="line">	strcpy(stu-&gt;name,&quot;lala&quot;);</span><br><span class="line">	printf(&quot;姓名：%s   年龄：%d \n&quot;,stu-&gt;name,stu-&gt;age);</span><br><span class="line">	</span><br><span class="line">	//单独为该结构体中的某个成员分配空间</span><br><span class="line">	struct Per* ptr = &amp;per;</span><br><span class="line">	ptr-&gt;name = (char*)malloc(sizeof(char) * 20);</span><br><span class="line">	strcpy(ptr-&gt;name, &quot;haha&quot;);</span><br><span class="line">	ptr-&gt;age = 15;</span><br><span class="line"></span><br><span class="line">	printf(&quot;姓名：%s   年龄：%d \n&quot;, ptr-&gt;name, ptr-&gt;age);</span><br><span class="line">	free(ptr-&gt;name);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>函数的返回值是一个句柄，它指向一个新创建的进程快照。如果函数调用失败，函数返回INVALID_HANDLE_VALUE。这个函数通常与<code>Process32First()</code>和<code>Process32Next()</code>一起使用，用于枚举进程和线程信息的快照。通过使用创建的进程快照句柄和枚举处理函数，可以获取当前系统中所有进程或线程的详细信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;tlhelp32.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    PROCESSENTRY32 pe32;</span><br><span class="line">    pe32.dwSize = sizeof(PROCESSENTRY32);</span><br><span class="line"> 	// 获取全部进程快照</span><br><span class="line">    HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);</span><br><span class="line">    //判断是否调用成功</span><br><span class="line">    if (hProcessSnap == INVALID_HANDLE_VALUE) return 1;</span><br><span class="line">	// 获取快照中第一条信息</span><br><span class="line">    BOOL process = Process32First(hProcessSnap, &amp;pe32);</span><br><span class="line">    if (process) &#123;</span><br><span class="line">        do &#123;</span><br><span class="line">            printf(&quot;Process name: %S\n&quot;, pe32.szExeFile);</span><br><span class="line">            // 获取快照中下一条信息</span><br><span class="line">        &#125; while (Process32Next(hProcessSnap, &amp;pe32));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    CloseHandle(hProcessSnap);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>通过在枚举过程中增加一个<code>_tcsicmp()</code>函数，判断<code>pe.szExeFile</code>与<code>szProcessName</code>两者的值我们就可以实现取特定进程的PID</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;tlhelp32.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">DWORD FindProcessID(LPCTSTR szProcessName)</span><br><span class="line">&#123;</span><br><span class="line">    DWORD dwPID = 0;</span><br><span class="line">    HANDLE hSnapShot = INVALID_HANDLE_VALUE;</span><br><span class="line">    PROCESSENTRY32 pe;</span><br><span class="line">    pe.dwSize = sizeof(PROCESSENTRY32);</span><br><span class="line">    hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPALL, NULL);</span><br><span class="line">    Process32First(hSnapShot, &amp;pe);</span><br><span class="line">    do</span><br><span class="line">    &#123;</span><br><span class="line">        if (!_tcsicmp(szProcessName, (LPCTSTR)pe.szExeFile))</span><br><span class="line">        &#123;</span><br><span class="line">            dwPID = pe.th32ProcessID;</span><br><span class="line">            break;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; while (Process32Next(hSnapShot, &amp;pe));</span><br><span class="line">    CloseHandle(hSnapShot);</span><br><span class="line">    return dwPID;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main(int argc, char* argv[])</span><br><span class="line">&#123;</span><br><span class="line">    DWORD PID = FindProcessID(L&quot;qq.exe&quot;);</span><br><span class="line">    printf(&quot;该进程PID是: %d \n&quot;, PID);</span><br><span class="line"></span><br><span class="line">    system(&quot;pause&quot;);</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><a target="_blank" rel="noopener" href="http://www.cnblogs.com/LyShark/p/17723950.html">www.cnblogs.com/LyShark/p/17723950.html</a></p>
 
       </section>
 
@@ -150,8 +155,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/15/%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">指针与数组</h2>
+        <a href="/2024/10/15/%E6%8C%87%E9%92%88%E4%B8%8E%E7%BB%93%E6%9E%84/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">指针与结构</h2>
         </a>
       
       <div class="card-text--row">Newer</div>
@@ -165,8 +170,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
+        <a href="/2024/10/15/%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%90%9C%E7%B4%A2/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">字符串搜索</h2>
         </a>
       
       <div class="card-text--row">Older</div>

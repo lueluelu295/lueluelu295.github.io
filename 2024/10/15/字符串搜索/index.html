@@ -22,7 +22,7 @@
 
   
 
-  <title>指针与结构 | Hexo</title>
+  <title>字符串搜索 | Hexo</title>
 
   
 
@@ -93,12 +93,17 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">指针与结构</h1>
+          <h1 class="title-wrap">字符串搜索</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
             <time  class="article-date" datetime="2024-10-15T03:13:19.000Z" itemprop="datePublished">2024-10-15</time>
           </h2>
+          
+            <h2 class="last-time">
+              <span>最后更新于</span>
+              <time  class="article-updated" datetime="2024-10-16T06:30:13.088Z" itemprop="dateUpdated">2024-10-16</time>
+            </h2>
           
           
           <ul class="wrap-list dark">
@@ -106,7 +111,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/c%E5%9F%BA%E7%A1%80/">🏷️ c基础</a></li>
+    <li><a href="/tags/%E9%80%86%E5%90%91/">🏷️ 逆向</a></li>
   
 </ul>
         </div>
@@ -132,12 +137,17 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
-<p><strong>结构体的定义与使用:</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">struct student</span><br><span class="line">&#123;</span><br><span class="line">	int num;</span><br><span class="line">	char name[20];</span><br><span class="line">	char age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	struct student stu = &#123;100,&quot;xixi&quot;,15&#125;;</span><br><span class="line">	printf(&quot;普通引用%d  --&gt;  %s --&gt; %d \n&quot;,stu.num,stu.name,stu.age);</span><br><span class="line"></span><br><span class="line">	struct student* p;</span><br><span class="line">	p = &amp;stu;</span><br><span class="line">	printf(&quot;指针引用%d  --&gt;  %s --&gt; %d \n&quot;, p-&gt;num, p-&gt;name, p-&gt;age);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><strong>动态分配结构体成员:</strong> </p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line"></span><br><span class="line">struct student</span><br><span class="line">&#123;</span><br><span class="line">	int num;</span><br><span class="line">	char name[20];</span><br><span class="line">	char age;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct Per &#123;</span><br><span class="line">	char* name;</span><br><span class="line">	int age;</span><br><span class="line">&#125;per;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	// 直接分配整个结构体空间大小</span><br><span class="line">	struct student *stu = malloc(sizeof(struct student));</span><br><span class="line">	stu-&gt;age = 24;</span><br><span class="line">	strcpy(stu-&gt;name,&quot;lala&quot;);</span><br><span class="line">	printf(&quot;姓名：%s   年龄：%d \n&quot;,stu-&gt;name,stu-&gt;age);</span><br><span class="line">	</span><br><span class="line">	//单独为该结构体中的某个成员分配空间</span><br><span class="line">	struct Per* ptr = &amp;per;</span><br><span class="line">	ptr-&gt;name = (char*)malloc(sizeof(char) * 20);</span><br><span class="line">	strcpy(ptr-&gt;name, &quot;haha&quot;);</span><br><span class="line">	ptr-&gt;age = 15;</span><br><span class="line"></span><br><span class="line">	printf(&quot;姓名：%s   年龄：%d \n&quot;, ptr-&gt;name, ptr-&gt;age);</span><br><span class="line">	free(ptr-&gt;name);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<p><strong>工具配置</strong></p>
+<p>1.确保程序入口点</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/01.jpg" alt="1"></p>
+<p>2.把程序拖入dbg中，运行程序</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/02.jpg" alt="1"></p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/05.jpg" alt="1"></p>
+<p>3.右键搜索-&gt;当前模块-&gt;字符串</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/03.jpg" alt="1"></p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/04.jpg" alt="1"></p>
 
       </section>
 
@@ -150,8 +160,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/15/%E6%8C%87%E9%92%88%E4%B8%8E%E6%95%B0%E7%BB%84/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">指针与数组</h2>
+        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
         </a>
       
       <div class="card-text--row">Newer</div>
@@ -165,8 +175,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
+        <a href="/2024/10/14/Windows%20Shellcode%E5%AD%A6%E4%B9%A0/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">Windows Shellcode学习</h2>
         </a>
       
       <div class="card-text--row">Older</div>
