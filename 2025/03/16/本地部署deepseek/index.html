@@ -22,7 +22,7 @@
 
   
 
-  <title>Windows令牌提权 | Hexo</title>
+  <title>本地部署deepseek | Hexo</title>
 
   
 
@@ -93,11 +93,11 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">Windows令牌提权</h1>
+          <h1 class="title-wrap">本地部署deepseek</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2024-10-21T03:13:19.000Z" itemprop="datePublished">2024-10-21</time>
+            <time  class="article-date" datetime="2025-03-16T03:13:19.000Z" itemprop="datePublished">2025-03-16</time>
           </h2>
           
           
@@ -106,7 +106,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/Windows/">🏷️ Windows</a></li>
+    <li><a href="/tags/ai/">🏷️ ai</a></li>
   
 </ul>
         </div>
@@ -134,22 +134,15 @@
 
 
 
-<h3 id="EPROCESS"><a href="#EPROCESS" class="headerlink" title="_EPROCESS"></a>_EPROCESS</h3><p>_EPROCESS&#96;是一种内核内存结构，它描述了我们所知道的系统进程（或者换句话说 - 系统上运行的每个进程在内核中的某个位置都有其相应的对象），因为它包含诸如进程映像名称、它正在运行的桌面会话、它拥有的其他内核对象的打开句柄数等详细信息， 它拥有什么访问令牌等等.</p>
-<p>首先观看pid找到进程的eprocess地址</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729509725070.jpg" alt="1"></p>
-<p>注意位置 ：ffffc58de73c3300 是我们的eprocess地址</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729509803511.jpg" alt="1"></p>
-<p>输入dt _eprocess ffffc58de73c3300就可以检索他的内容，找到token位置</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510198787.jpg" alt="1"></p>
-<p>查看自身token，暂未未进行提权</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510354310.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510392062.jpg" alt="1"></p>
-<p>此时输入!process 4 1查看一个拥有system权限的令牌地址</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510461030.jpg" alt="1"></p>
-<p>使用eq命令进行修改</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510519660.jpg" alt="1"></p>
-<p>查看当前权限和token已经提权成功</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/%E4%BB%A4%E7%89%8C%E6%8F%90%E6%9D%83/1729510588099.jpg" alt="1"></p>
+<p><strong>下载链接</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://lmstudio.ai/</span><br></pre></td></tr></table></figure>
+
+<p>1.安装完成之后修改中文:</p>
+<p><img src="/./1.jpg" alt="1"></p>
+<p>2.选择一个模型进行下载，没有该配置文件的话是空的（如果是空的需要修改文件）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1：	安装路径\resources\app\webpack\main\index.js</span><br><span class="line">2：	安装路径\resources\app\webpack\renderer\main_window.js</span><br><span class="line">将两个文件中的huggingface.co替换成hf-mirror.com</span><br></pre></td></tr></table></figure>
+
+<p><img src="/.2.jpg" alt="1"></p>
 
       </section>
 
@@ -157,28 +150,14 @@
       
         <nav class="article-nav">
           
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/2024/10/21/%E8%84%B1%E5%A3%B3/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">脱壳</h2>
-        </a>
-      
-      <div class="card-text--row">Newer</div>
-    </div>
-  </article>
-</div>
-          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2024/10/20/%E5%B8%B8%E8%A7%81winapi/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">常见winapi</h2>
+        <a href="/2024/11/05/SSRF/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">SSRF</h2>
         </a>
       
       <div class="card-text--row">Older</div>
